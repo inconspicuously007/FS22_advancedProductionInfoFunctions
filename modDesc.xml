@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<modDesc descVersion="71">
+    <author>Sly</author>
+    <version>0.9.12.0</version>
+    <title>
+		<de>erweiterte Infos und neue Funktionen für Produktionen</de>
+		<en>extended Info hud and new functionality to production points</en>
+    </title>
+    <description>
+        <en>
+            <![CDATA[A small mod 
+]]>
+</en>
+    </description>
+    <iconFilename>modIcon.dds</iconFilename>
+    <multiplayer supported="true" />
+
+	<extraSourceFiles>
+		<sourceFile filename="scripts/ModSettings.lua" />
+		<sourceFile filename="scripts/AdvancedProductionChainManager.lua" />
+        <sourceFile filename="scripts/AdvancedProductionPoint.lua" />
+		<sourceFile filename="scripts/AdvancedProductionPointInfo.lua" />
+		<sourceFile filename="scripts/AdvancedHusbandryInfo.lua" />
+		<sourceFile filename="scripts/AdvancedSiloInfo.lua" />		
+		<sourceFile filename="scripts/AdvancedProductionPointPalletSpawner.lua" />
+        <sourceFile filename="scripts/AnimalToProductionTrigger.lua" />
+        <sourceFile filename="scripts/AnimalMoveProductionEvent.lua" />
+        <sourceFile filename="scripts/AnimalScreenTrailerProduction.lua" />
+    </extraSourceFiles>
+	
+	<l10n filenamePrefix="languages/l10n" />
+</modDesc>

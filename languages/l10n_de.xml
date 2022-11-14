@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<l10n>
+	<translationContributors>Sly</translationContributors>
+    <texts>
+		<text name="advprod_ui_production_output_storing" text="Einlagern" />
+		<text name="advprod_ui_production_output_spawn_pallets" text="Auslagern" />
+		<text name="advprod_ui_production_outputMode" text="Ausgangsmodus aktiver Produktionen"/>
+		<text name="advprod_ui_production_missingInputs" text="Fehlende Eingangs-Produkte"/>
+		<text name="advprod_ui_production_showProductionList" text="Alle Produktionen"/>
+		<text name="advprod_ui_production_showActiveProductionList" text="Aktive Produktionen"/>
+		<text name="advprod_ui_production_showInActiveProductionList" text="Inaktive Produktionen"/>
+		<text name="advprod_ui_ingameMenuFrameHeaderTitle" text="Produktionsketten"/>
+		<text name="advprod_ui_ingameMenuFrameHeaderTitleActive" text="(aktiv)"/>
+		<text name="advprod_ui_ingameMenuFrameHeaderTitleInActive" text="(inaktiv)"/>
+		<text name="advprod_ui_ingameMenuFrameHeaderTitleAll" text="(gesamt)"/>
+		
+		<text name="advprod_ui_production_spawnPallet" text="Paletten auslagern"/>
+		<text name="advprod_ui_production_pallet" text="Palette"/>
+		<text name="advprod_ui_production_pallets" text="Paletten"/>
+		<text name="advprod_ui_production_amount" text="Anzahl wählen"/>
+		
+		<text name="advsilo_ui_fill_level" text="Füllstand"/>
+		<text name="advsilo_ui_storage_capacities" text="Lagerkapazitäten"/>
+		<text name="advsilo_ui_storage_used_capacity" text="Kapazität genutzt"/>
+		<text name="advsilo_ui_storage_source" text="Kapazität Haupt-Silo"/>
+		<text name="advsilo_ui_storage_capacity_by_filltype" text="Kapazität je Typ"/>
+		<text name="advsilo_ui_storage_capacity_total" text="Kapazität gesamt"/>
+		<text name="advsilo_ui_storage_capacity_extensions" text="Kapazität Erweiterungen"/>
+		<text name="advsilo_ui_storage_num_extensions" text="Anzahl Erweiterungen"/>
+		<text name="advprod_ui_production_status_paused" text="Betriebspause" />
+		<text name="advprod_ui_production_opening" text="Betriebszeit" />
+		<text name="advsilo_ui_connected_placeables" text="Angebundene Gebäude" />
+		
+		<text name="modsetting_ui_fillLevelColoredTitle" text="Füllstandsanzeige" />
+		<text name="modsetting_ui_fillLevelColoredTooltip" text="Füllstände in Produktionen und Tierställen können farblich abgestuft angezeigt werden." />
+		<text name="modsetting_ui_title" text="Erweiterte Einstellungen für Produktionen, Silos, Ställe" />
+		<text name="modsetting_ui_fillLevelColored_none" text="Giants-Standard" />
+		<text name="modsetting_ui_fillLevelColored" text="Farbabstufung" />
+
+		<text name="advprod_ui_productionPoint" 			  text="Produktion" />
+		<text name="advprod_ui_moveToProduction" 			  text="In die Produktion ausladen" />
+		<text name="advprod_ui_confirmMoveToProduction"		  text="Sollen diese %d Tiere (%s) in die Produktion ausgeladen werden?"/>
+		<text name="advprod_ui_movedToProduction"			  text="Die Tiere wurden in die Produktion ausgeladen!"/>
+		<text name="advprod_ui_messageProductionDoesNotExist" text="Die Produktion existiert nicht mehr!"/>
+		<text name="advprod_ui_messageAnimalTypeNotSupportedAge" 	text="Ausladen nicht möglich. Diese Tierart hat noch nicht das passende Alter!"/>
+		<text name="advprod_ui_messageAnimalTypeNotSupportedHealth" text="Ausladen nicht möglich. Diese Tierart ist nicht ausreichend gesund!"/>
+	</texts>
+</l10n>

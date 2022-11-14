@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<l10n>
+	<translationContributors>Sly</translationContributors>
+    <texts>
+		<text name="advprod_ui_production_output_storing" text="Store" />
+		<text name="advprod_ui_production_output_keep_in_storage" text="Spawn" />
+		<text name="advprod_ui_production_outputMode" text="Output mode of active productions"/>
+		<text name="advprod_ui_production_missingInputs" text="Missing input filltypes"/>
+		<text name="advprod_ui_production_showProductionList" text="All productions"/>
+		<text name="advprod_ui_production_showActiveProductionList" text="Active productions"/>	
+		<text name="advprod_ui_production_showInActiveProductionList" text="Inactive productions"/>	
+		<text name="advprod_ui_ingameMenuFrameHeaderTitle" text="production chains"/>
+		<text name="advprod_ui_ingameMenuFrameHeaderTitleActive" text="(active)"/>
+		<text name="advprod_ui_ingameMenuFrameHeaderTitleInActive" text="(inactive)"/>
+		<text name="advprod_ui_ingameMenuFrameHeaderTitleAll" text="(all)"/>
+		
+		<text name="advprod_ui_production_spawnPallet" text="Spawn pallets"/>
+		<text name="advprod_ui_production_pallet" text="Pallet"/>
+		<text name="advprod_ui_production_pallets" text="Pallet"/>
+		<text name="advprod_ui_production_amount" text="Choose amount"/>
+		
+		<text name="advsilo_ui_fill_level" text="Fill level"/>
+		<text name="advsilo_ui_storage_capacities" text="Storage capacities"/>
+		<text name="advsilo_ui_storage_used_capacity" text="Capacity used"/>
+		<text name="advsilo_ui_storage_source" text="current Storage"/>
+		<text name="advsilo_ui_storage_capacity_by_filltype" text="Capacity per type"/>
+		<text name="advsilo_ui_storage_capacity_total" text="Capacity overall"/>
+		<text name="advsilo_ui_storage_capacity_extensions" text="Capacity extensions"/>
+		<text name="advsilo_ui_storage_num_extensions" text="Num extensions"/>		
+		<text name="advprod_ui_production_status_paused" text="Production paused" />
+		<text name="advprod_ui_production_opening" text="Production working hours" />
+		<text name="advsilo_ui_connected_placeables" text="Connected Placeables" />
+		
+		<text name="modsetting_ui_fillLevelColoredTitle" text="fill level scale" />
+		<text name="modsetting_ui_fillLevelColoredTooltip" text="Fill level at productions and animal pens can have coloured graduations." />
+		<text name="modsetting_ui_title" text="advanced production functions settings" />
+		<text name="modsetting_ui_fillLevelColored_none" text="Giants-Default" />
+		<text name="modsetting_ui_fillLevelColored" text="Colored" />
+	</texts>
+</l10n>

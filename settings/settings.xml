@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<globalSettings>
+    <productionPointLimit>60</productionPointLimit> <!-- default:60, max: 120 -->
+    <palletLimit>300</palletLimit>					<!-- default:300, max:9999 == infinite -->
+	<husbandryLimit>10</husbandryLimit>				<!-- default:10, max: 32 -->
+</globalSettings>

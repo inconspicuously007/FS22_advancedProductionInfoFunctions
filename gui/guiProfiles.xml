@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<GUIProfiles>
+    <Presets>
+		<Preset name="adv_colorTransparent" value="0 0 0 0"/>
+        <Preset name="adv_colorWhite" value="1 1 1 1"/>
+		<Preset name="adv_colorYellow" value="0.98 0.42 0 1"/> 
+		<Preset name="adv_colorYellow_50" value="0.98 0.42 0 0.5"/>
+		<Preset name="adv_colorYellow_75" value="0.98 0.42 0 0.75"/>
+		<Preset name="adv_colorRed" value="0.8069 0.0097 0.0097 1"/>
+		<Preset name="adv_colorRed_50" value="0.8069 0.0097 0.0097 0.5"/>
+		<Preset name="adv_colorRed_75" value="0.8069 0.0097 0.0097 0.75"/>
+		<Preset name="adv_colorGreen" value="0.3763 0.6038 0.0782 1"/>		
+		<Preset name="adv_colorGreen_50" value="0.3763 0.6038 0.0782 0.5"/>
+		<Preset name="adv_colorGreen_75" value="0.3763 0.6038 0.0782 0.75"/>
+    </Presets>
+	
+	<Profile name="adv_ingameMenuProductionProductionActivity" extends="baseReference" with="anchorMiddleRight">
+        <Value name="size" value="12px 12px" />
+        <Value name="position" value="-15px 0" />
+        <Value name="imageUVs" value="630px 390px 12px 12px" />
+        <Value name="imageColor" value="$preset_adv_colorTransparent" />
+        <Value name="imageSelectedColor" value="$preset_adv_colorTransparent" />
+    </Profile>	
+	<Profile name="adv_ingameMenuProductionProductionActivityActive" extends="adv_ingameMenuProductionProductionActivity">
+        <Value name="imageColor" value="$preset_adv_colorGreen" />
+        <Value name="imageSelectedColor" value="$preset_adv_colorGreen_75" />
+    </Profile>
+    <Profile name="adv_ingameMenuProductionProductionActivityIssue" extends="adv_ingameMenuProductionProductionActivity">
+        <Value name="imageColor" value="$preset_adv_colorRed" />
+        <Value name="imageSelectedColor" value="$preset_adv_colorRed_75" />
+    </Profile>	
+    <Profile name="adv_ingameMenuProductionProductionActivityPause" extends="adv_ingameMenuProductionProductionActivity">
+        <Value name="imageColor" value="$preset_adv_colorYellow" />
+        <Value name="imageSelectedColor" value="$preset_adv_colorYellow_75" />
+    </Profile>    
+</GUIProfiles>
