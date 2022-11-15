@@ -194,7 +194,7 @@ end
 function AdvancedProductionPointInfo:getProductionPoints_old(superFunc)
 	local productionPoints = self.chainManager:getProductionPointsForFarmId(self.playerFarm.farmId)
 	table.sort(productionPoints, function(a, b) return a:getName():upper() .. a.id < b:getName():upper() .. b.id end)
-	for id, prodPoint in pairs(productionPoints) do
+	for _, prodPoint in pairs(productionPoints) do
 		table.sort(prodPoint.productions, function(a, b) return a.name:upper() .. a.id .. a.status < b.name:upper() .. b.id .. b.status end)
 	end
 	return productionPoints
@@ -209,7 +209,7 @@ function AdvancedProductionPointInfo:getProductionPoints(superFunc)
 	
 	local function filterProdPoints(prodPoints)
 		local productionPoints = {}
-		for pointId, prodPoint in ipairs(prodPoints) do
+		for _, prodPoint in ipairs(prodPoints) do
 			local productionLines = {}
 			if prodPoint.helperProductions == nil then
 				prodPoint.helperProductions = prodPoint.productions
@@ -218,7 +218,7 @@ function AdvancedProductionPointInfo:getProductionPoints(superFunc)
 			numProductions = numProductions + #prodPoint.productions
 			numActiveProductions = numActiveProductions + #prodPoint.activeProductions
 			if self.productionListState ~= nil then
-				for prodId, production in ipairs(prodPoint.productions) do
+				for _, production in ipairs(prodPoint.productions) do
 					if self.productionListState == InGameMenuProductionFrame.VIEW_STATUS.ACTIVE then
 						if production.status ~= ProductionPoint.PROD_STATUS.INACTIVE then 
 							table.insert(productionLines, production)
@@ -476,7 +476,7 @@ function AdvancedProductionPointInfo:updateDetails(superFunc)
 	
 	--create recipe
 	local lineCounter = 0
-	for index, list in ipairs(myList) do		
+	for _, list in ipairs(myList) do
 		if list ~= nil and #list ~= 0 then 
 			--add plus between inputs
 			if lineCounter ~= 0 then
