@@ -1133,7 +1133,11 @@ function ProductionPoint:manualSpawnPalletsCallback(pallet, status, fillTypeId)
 	end
 end
 
-
+function AdvancedProductionPoint:delete()
+	if self.animalToProductionTrigger then
+        self.animalToProductionTrigger:delete()
+    end
+end
 
 ProductionPoint.registerXMLPaths 				= Utils.prependedFunction(ProductionPoint.registerXMLPaths, AdvancedProductionPoint.registerXMLPaths)
 ProductionPoint.registerSavegameXMLPaths 		= Utils.prependedFunction(ProductionPoint.registerSavegameXMLPaths, AdvancedProductionPoint.registerSavegameXMLPaths)
@@ -1148,3 +1152,4 @@ ProductionPoint.readStream 						= Utils.overwrittenFunction(ProductionPoint.rea
 ProductionPoint.writeStream 					= Utils.overwrittenFunction(ProductionPoint.writeStream, AdvancedProductionPoint.writeStream)
 ProductionPoint.setProductionState				= Utils.overwrittenFunction(ProductionPoint.setProductionState, AdvancedProductionPoint.setProductionState)
 ProductionPoint.updateInfo 						= Utils.overwrittenFunction(ProductionPoint.updateInfo, AdvancedProductionPoint.updateInfo)
+ProductionPoint.delete 							= Utils.prependedFunction(ProductionPoint.delete, AdvancedProductionPoint.delete)
