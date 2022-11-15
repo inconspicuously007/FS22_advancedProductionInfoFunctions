@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="71">
     <author>Sly</author>
-    <version>0.9.12.0</version>
+    <version>0.10.0.0</version>
     <title>
 		<de>erweiterte Infos und neue Funktionen für Produktionen</de>
 		<en>extended Info hud and new functionality to production points</en>
