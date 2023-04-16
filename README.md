@@ -1,3 +1,3 @@
 # FS22_advancedProductionInfoFunctions
 
-(releases/latest)
+https://github.com/inconspicuously007/FS22_advancedProductionInfoFunctions/releases/latest
