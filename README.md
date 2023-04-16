@@ -1,3 +1,3 @@
 # FS22_advancedProductionInfoFunctions
 
-releases/latest
+(releases/latest)
