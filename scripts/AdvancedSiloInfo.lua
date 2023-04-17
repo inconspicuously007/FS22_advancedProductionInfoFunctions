@@ -21,9 +21,6 @@ function AdvancedSiloInfo:updateInfoSilo(superFunc, superFunc, infoTable)
 	table.clear(spec.infoTriggerFillTypesAndLevels)	
 	
 	for _, storage in pairs(sourceStorages) do
-	
-		--print("Debug: AdvancedSiloInfo:updateInfoSilo")
-		--DebugUtil.printTableRecursively(storage,"_",0,2)
 		
 		if spec.loadingStation:hasFarmAccessToStorage(farmId, storage) then
 			totalCapacity = totalCapacity + storage.capacity

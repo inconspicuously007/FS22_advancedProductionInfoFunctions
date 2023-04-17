@@ -13,7 +13,7 @@ AnimalMoveProductionEvent = {
 }
 local AnimalMoveProductionEvent_mt = Class(AnimalMoveProductionEvent, Event)
 
-InitEventClass(AnimalMoveProductionEvent, "AnimalMoveProductionEvent", EventIds.EVENT_ANIMAL_MOVE)
+InitEventClass(AnimalMoveProductionEvent, "AnimalMoveProductionEvent")
 
 function AnimalMoveProductionEvent.emptyNew()
     local self = Event.new(AnimalMoveProductionEvent_mt)
@@ -81,7 +81,7 @@ function AnimalMoveProductionEvent:run(connection)
         local fillTypeRatio = self.targetObject.supportedAnimalSubTypes[subType.fillTypeIndex].fillTypeRatio
         local deltaFillLevel = fillTypeRatio * self.numAnimals
         local fillLevel = self.targetObject.storage:getFillLevel(fillType.index)
-        self.targetObject.storage:setFillLevel(fillLevel + deltaFillLevel, fillType.index, nil)
+        self.targetObject.storage:setFillLevel(fillLevel + deltaFillLevel, fillType.index)
 
         local clusterSystem = self.sourceObject:getClusterSystem()
         cluster:changeNumAnimals(-self.numAnimals)

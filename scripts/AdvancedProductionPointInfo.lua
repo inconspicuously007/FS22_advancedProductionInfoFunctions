@@ -92,23 +92,8 @@ end
 
 function AdvancedProductionPointInfo:populateCellForItemInSection(superFunc, list, section, index, cell)
 	
-	--if g_modIsLoaded.pdlc_pumpsAndHosesPack then		
-	--	local prodPoint = self:getProductionPoints()[section]		
-	--	if prodPoint.owningPlaceable.isSandboxPlaceable ~= nil and prodPoint.owningPlaceable:isSandboxPlaceable() then				
-	--		return superFunc(self, list, section, index, cell)	
-	--	end	
-	--end
-	
 	if list == self.productionList then
 		local productionPoint = self:getProductionPoints()[section]
-		
-		--if g_modIsLoaded.pdlc_pumpsAndHosesPack then					
-		--	if productionPoint.owningPlaceable.isSandboxPlaceable ~= nil and productionPoint.owningPlaceable:isSandboxPlaceable() then				
-		--		return superFunc(self, list, section, index, cell)	
-		--	end	
-		--end
-		
-		
 		
 		local production = productionPoint.productions[index]
 		if production ~= nil then
@@ -136,12 +121,6 @@ function AdvancedProductionPointInfo:populateCellForItemInSection(superFunc, lis
 		end
 	else
 		local _, productionPoint = self:getSelectedProduction()
-		
-		--if g_modIsLoaded.pdlc_pumpsAndHosesPack then					
-		--	if productionPoint.owningPlaceable.isSandboxPlaceable ~= nil and productionPoint.owningPlaceable:isSandboxPlaceable() then				
-		--		return superFunc(self, list, section, index, cell)	
-		--	end	
-		--end
 		
 		local fillType, isInput = nil
 
@@ -360,166 +339,159 @@ function AdvancedProductionPointInfo:updateDetails(superFunc)
 		return superFunc(self)					
 	end	
 	
-	local status = production.status
-	local statusKey = ProductionPoint.PROD_STATUS_TO_L10N[production.status] or "unknown"
-	local statusProfile = "ingameMenuProductionDetailValue"
+	if production ~= nil then 	
+		local status = production.status
+		local statusKey = ProductionPoint.PROD_STATUS_TO_L10N[production.status] or "unknown"
+		local statusProfile = "ingameMenuProductionDetailValue"
 
-	if status == ProductionPoint.PROD_STATUS.MISSING_INPUTS then
-		statusProfile = "ingameMenuProductionDetailValueError"
-	elseif status == ProductionPoint.PROD_STATUS.NO_OUTPUT_SPACE then
-		statusProfile = "ingameMenuProductionDetailValueError"
-	end
-
-	self.detailProductionStatus:applyProfile(statusProfile)	
-	self.detailProductionStatus:setText(g_i18n:getText(ProductionPoint.PROD_STATUS_TO_L10N[production.status]))
-	self.detailCyclesPerMonth:setText(MathUtil.round(production.cyclesPerMonth, 2))
-	self.detailCostsPerMonth:setValue(production.costsPerActiveMonth)
-
-	--add opening hours
-	local myTxtElement = TextElement.new()
-	local myTxtElement2 = TextElement.new()
-	
-	myTxtElement:copyAttributes(self.productionCostsDesc)	
-	myTxtElement.text=g_i18n:getText("advprod_ui_production_opening")	
-	--myTxtElement.absPosition[2] = self.productionCostsDesc.absPosition[2] + ((self.productionCostsDesc.absPosition[2] - self.productionCyclesDesc.absPosition[2]) - 0.2)		
-	myTxtElement.position[2] = self.productionCostsDesc.position[2] + ((self.productionCostsDesc.position[2] - self.productionCyclesDesc.position[2]))		
-	myTxtElement.additionalLine = true
-	
-	
-	myTxtElement2:copyAttributes(self.detailCostsPerMonth)	
-	myTxtElement2.text = string.format("%s - %s", self.selectedProductionPoint.openingHour, self.selectedProductionPoint.closingHour)	
-	--myTxtElement2.absPosition[2] = self.detailCostsPerMonth.absPosition[2] + ((self.detailCostsPerMonth.absPosition[2] - self.detailCyclesPerMonth.absPosition[2]) - 0.2)	
-	myTxtElement2.position[2] = self.detailCostsPerMonth.position[2] + ((self.detailCostsPerMonth.position[2] - self.detailCyclesPerMonth.position[2]))	
-	myTxtElement2.additionalLine = true
-	
-	self.detailsBox:addElement(myTxtElement)
-	self.detailsBox:addElement(myTxtElement2)
-	
-	myTxtElement:updateAbsolutePosition()
-	myTxtElement2:updateAbsolutePosition()
-	
-
-	local function addIcons(list, layout)
-		for i = 1, #layout.elements do
-			layout.elements[1]:delete()
+		if status == ProductionPoint.PROD_STATUS.MISSING_INPUTS then
+			statusProfile = "ingameMenuProductionDetailValueError"
+		elseif status == ProductionPoint.PROD_STATUS.NO_OUTPUT_SPACE then
+			statusProfile = "ingameMenuProductionDetailValueError"
 		end
 
-		for index, item in ipairs(list) do
-			
-			if index > 1 then
-				self.recipePlus:clone(layout)
+		self.detailProductionStatus:applyProfile(statusProfile)	
+		self.detailProductionStatus:setText(g_i18n:getText(ProductionPoint.PROD_STATUS_TO_L10N[production.status]))
+		self.detailCyclesPerMonth:setText(MathUtil.round(production.cyclesPerMonth, 2))
+		self.detailCostsPerMonth:setValue(production.costsPerActiveMonth)
+
+		--add opening hours
+		local myTxtElement = TextElement.new()
+		local myTxtElement2 = TextElement.new()
+		
+		myTxtElement:copyAttributes(self.productionCostsDesc)	
+		myTxtElement.text=g_i18n:getText("advprod_ui_production_opening")	
+		--myTxtElement.absPosition[2] = self.productionCostsDesc.absPosition[2] + ((self.productionCostsDesc.absPosition[2] - self.productionCyclesDesc.absPosition[2]) - 0.2)		
+		myTxtElement.position[2] = self.productionCostsDesc.position[2] + ((self.productionCostsDesc.position[2] - self.productionCyclesDesc.position[2]))		
+		myTxtElement.additionalLine = true
+		
+		
+		myTxtElement2:copyAttributes(self.detailCostsPerMonth)	
+		myTxtElement2.text = string.format("%s - %s", self.selectedProductionPoint.openingHour, self.selectedProductionPoint.closingHour)	
+		--myTxtElement2.absPosition[2] = self.detailCostsPerMonth.absPosition[2] + ((self.detailCostsPerMonth.absPosition[2] - self.detailCyclesPerMonth.absPosition[2]) - 0.2)	
+		myTxtElement2.position[2] = self.detailCostsPerMonth.position[2] + ((self.detailCostsPerMonth.position[2] - self.detailCyclesPerMonth.position[2]))	
+		myTxtElement2.additionalLine = true
+		
+		self.detailsBox:addElement(myTxtElement)
+		self.detailsBox:addElement(myTxtElement2)
+		
+		myTxtElement:updateAbsolutePosition()
+		myTxtElement2:updateAbsolutePosition()
+		
+
+		local function addIcons(list, layout)
+			for i = 1, #layout.elements do
+				layout.elements[1]:delete()
 			end
 
-			if item.amount ~= 1 then
-				local count = self.recipeText:clone(layout)
+			for index, item in ipairs(list) do
+				
+				if index > 1 then
+					self.recipePlus:clone(layout)
+				end
 
-				count:setText(g_i18n:formatNumber(item.amount, 2))
+				if item.amount ~= 1 then
+					local count = self.recipeText:clone(layout)
+
+					count:setText(g_i18n:formatNumber(item.amount, 2))
+				end
+
+				local fillType = g_fillTypeManager:getFillTypeByIndex(item.type)
+				local icon = self.recipeFillIcon:clone(layout)
+				
+				icon:setImageFilename(fillType.hudOverlayFilename)
 			end
 
-			local fillType = g_fillTypeManager:getFillTypeByIndex(item.type)
-			local icon = self.recipeFillIcon:clone(layout)
-			
-			icon:setImageFilename(fillType.hudOverlayFilename)
-		end
-
-		layout:invalidateLayout()
-	end
-	
-	local function addCustomIcons(list, layout)
-		for i = 1, #layout.elements do
-			layout.elements[1]:delete()
-		end
-
-		for index, item in ipairs(list) do
-			
-			if index > 1 then
-				self.recipePlus:clone(layout)
-			end
-
-			if item.amount ~= 1 then
-				local count = self.recipeText:clone(layout)
-
-				count:setText(g_i18n:formatNumber(item.amount, 2))
-			end
-
-			local fillType = g_fillTypeManager:getFillTypeByIndex(item.type)
-			local icon = self.recipeFillIcon:clone(layout)			
-			icon:setImageFilename(fillType.hudOverlayFilename)
-		end
-
-		--layout:invalidateLayout()
-	end
-	
-	--reset detailsBox
-	--for i = #self.detailsBox.elements, 1, -1 do		
-	--	if i >= 12 then
-	--		if self.detailsBox.elements[i] ~= nil then
-	--			self.detailsBox.elements[i]:delete()
-	--		end
-	--	end
-	--end
-	
-	local myList = {}
-	local listIndex = 1
-	local inputsInRow = 3
-	for index, item in ipairs(production.inputs) do			
-		if myList[listIndex] == nil then
-			myList[listIndex] = {}
+			layout:invalidateLayout()
 		end
 		
-		table.insert(myList[listIndex], item)
-		
-		if index % inputsInRow == 0 then
-			listIndex = listIndex + 1
+		local function addCustomIcons(list, layout)
+			for i = 1, #layout.elements do
+				layout.elements[1]:delete()
+			end
+
+			for index, item in ipairs(list) do
+				
+				if index > 1 then
+					self.recipePlus:clone(layout)
+				end
+
+				if item.amount ~= 1 then
+					local count = self.recipeText:clone(layout)
+
+					count:setText(g_i18n:formatNumber(item.amount, 2))
+				end
+
+				local fillType = g_fillTypeManager:getFillTypeByIndex(item.type)
+				local icon = self.recipeFillIcon:clone(layout)			
+				icon:setImageFilename(fillType.hudOverlayFilename)
+			end
+
+			--layout:invalidateLayout()
 		end
-	end	
-	
-	--create recipe
-	local lineCounter = 0
-	for _, list in ipairs(myList) do
-		if list ~= nil and #list ~= 0 then 
-			--add plus between inputs
-			if lineCounter ~= 0 then
+		
+		local myList = {}
+		local listIndex = 1
+		local inputsInRow = 3
+		for index, item in ipairs(production.inputs) do			
+			if myList[listIndex] == nil then
+				myList[listIndex] = {}
+			end
+			
+			table.insert(myList[listIndex], item)
+			
+			if index % inputsInRow == 0 then
+				listIndex = listIndex + 1
+			end
+		end	
+		
+		--create recipe
+		local lineCounter = 0
+		for _, list in ipairs(myList) do
+			if list ~= nil and #list ~= 0 then 
+				--add plus between inputs
+				if lineCounter ~= 0 then
+					local myElement = FlowLayoutElement.new();
+					myElement:copyAttributes(self.detailRecipeInputLayout);
+					--myElement.absPosition[2] = self.detailRecipeInputLayout.absPosition[2] - (self.detailRecipeInputLayout.absSize[2] * (lineCounter))
+					myElement.position[2] = self.detailRecipeInputLayout.position[2] - (self.detailRecipeInputLayout.size[2] * (lineCounter))
+					myElement.additionalLine = true
+					lineCounter = lineCounter + 1
+					self.recipePlus:clone(myElement)
+					self.detailsBox:addElement(myElement)
+					myElement:updateAbsolutePosition()
+					myElement:invalidateLayout()
+				end
+				
 				local myElement = FlowLayoutElement.new();
 				myElement:copyAttributes(self.detailRecipeInputLayout);
 				--myElement.absPosition[2] = self.detailRecipeInputLayout.absPosition[2] - (self.detailRecipeInputLayout.absSize[2] * (lineCounter))
 				myElement.position[2] = self.detailRecipeInputLayout.position[2] - (self.detailRecipeInputLayout.size[2] * (lineCounter))
 				myElement.additionalLine = true
+				
 				lineCounter = lineCounter + 1
-				self.recipePlus:clone(myElement)
-				self.detailsBox:addElement(myElement)
+				--addCustomIcons(list, myElement)
+				addIcons(list, myElement)
+				self.detailsBox:addElement(myElement);
 				myElement:updateAbsolutePosition()
 				myElement:invalidateLayout()
 			end
-			
-			local myElement = FlowLayoutElement.new();
-			myElement:copyAttributes(self.detailRecipeInputLayout);
-			--myElement.absPosition[2] = self.detailRecipeInputLayout.absPosition[2] - (self.detailRecipeInputLayout.absSize[2] * (lineCounter))
-			myElement.position[2] = self.detailRecipeInputLayout.position[2] - (self.detailRecipeInputLayout.size[2] * (lineCounter))
-			myElement.additionalLine = true
-			
-			lineCounter = lineCounter + 1
-			--addCustomIcons(list, myElement)
-			addIcons(list, myElement)
-			self.detailsBox:addElement(myElement);
-			myElement:updateAbsolutePosition()
-			myElement:invalidateLayout()
-		end
-	end		
-	
-	--move arrow
-	--self.detailsBox.elements[10].position[2] = self.detailRecipeInputLayout.position[2] - (self.detailRecipeInputLayout.size[2] * (lineCounter))
-	self.detailsBox.elements[10].position[2] = self.detailRecipeInputLayout.position[2] - (self.detailRecipeInputLayout.size[2] * lineCounter) - (self.detailsBox.elements[10].size[2] / 2)
-	self.detailsBox.elements[10]:updateAbsolutePosition()
-	printf("self.detailsBox.elements[10].position[2].before: '%s'", self.detailsBox.elements[10].position[2])
-	--move result list
-	--self.detailRecipeOutputLayout.absPosition[2] = self.detailRecipeInputLayout.absPosition[2] - (self.detailRecipeInputLayout.absSize[2] * (lineCounter + 1))
-	self.detailRecipeOutputLayout.position[2] = self.detailRecipeInputLayout.position[2] - (self.detailRecipeInputLayout.size[2] * (lineCounter + 1))
-	self.detailRecipeOutputLayout:updateAbsolutePosition()
-	
-	--addIcons(production.inputs, self.detailRecipeInputLayout)
-	addIcons(production.outputs, self.detailRecipeOutputLayout)
-	self.storageList:reloadData()
+		end		
+		
+		--move arrow
+		--self.detailsBox.elements[10].position[2] = self.detailRecipeInputLayout.position[2] - (self.detailRecipeInputLayout.size[2] * (lineCounter))
+		self.detailsBox.elements[10].position[2] = self.detailRecipeInputLayout.position[2] - (self.detailRecipeInputLayout.size[2] * lineCounter) - (self.detailsBox.elements[10].size[2] / 2)
+		self.detailsBox.elements[10]:updateAbsolutePosition()
+		
+		--move result list
+		--self.detailRecipeOutputLayout.absPosition[2] = self.detailRecipeInputLayout.absPosition[2] - (self.detailRecipeInputLayout.absSize[2] * (lineCounter + 1))
+		self.detailRecipeOutputLayout.position[2] = self.detailRecipeInputLayout.position[2] - (self.detailRecipeInputLayout.size[2] * (lineCounter + 1))
+		self.detailRecipeOutputLayout:updateAbsolutePosition()
+		
+		--addIcons(production.inputs, self.detailRecipeInputLayout)
+		addIcons(production.outputs, self.detailRecipeOutputLayout)
+		self.storageList:reloadData()
+	end
 end
 
 function AdvancedProductionPointInfo:updateUtilizationOverviews(superFunc)
@@ -587,16 +559,9 @@ function AdvancedProductionPointInfo:updateUtilizationOverviews(superFunc)
 			end
 		end
 	end
-	--print("Debug: self.detailsBox.elements.utilizationBox")
-	--DebugUtil.printTableRecursively(self.detailsBox.elements,"_",0,2)
-	--local elm = self:getElementById(self.detailsBox, "utilizationBox", true)
-	--DebugUtil.printTableRecursively(elm,"_",0,2)
 end
 
 function AdvancedProductionPointInfo:inject_populateCellForItemInSection(superFunc, superFunc, list, section, index, cell)
-	--superFunc(self, list, section, index, cell)
-	--print("Debug: inject_populateCellForItemInSection")
-	--DebugUtil.printTableRecursively(self,"_",0,2)
 	if list == self.productionList then
 		local productionPoint = self:getProductionPoints()[section]
 		local production = productionPoint.productions[index]
@@ -633,7 +598,4 @@ if g_modIsLoaded.pdlc_pumpsAndHosesPack then
 	--print("Debug: g_modIsLoaded.pdlc_pumpsAndHosesPack")
 	InGameMenuProductionFrame.updateUtilizationOverviews = Utils.appendedFunction(InGameMenuProductionFrame.updateUtilizationOverviews, AdvancedProductionPointInfo.updateUtilizationOverviews)
 	InGameMenuProductionFrame.inject_populateCellForItemInSection = Utils.appendedFunction(InGameMenuProductionFrame.inject_populateCellForItemInSection, AdvancedProductionPointInfo.inject_populateCellForItemInSection)
-end 
-
---print("Debug: g_modIsLoaded")
---DebugUtil.printTableRecursively(g_modIsLoaded,"_",0,2)
+end

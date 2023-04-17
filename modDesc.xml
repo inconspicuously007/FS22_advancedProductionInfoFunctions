@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
-<modDesc descVersion="71">
+<modDesc descVersion="72">
     <author>Sly</author>
-    <version>0.10.0.0</version>
+    <version>0.11.0.34</version>
     <title>
-		<de>erweiterte Infos und neue Funktionen für Produktionen</de>
-		<en>extended Info hud and new functionality to production points</en>
+		<de>Erweiterte Anzeigen und Funktionen</de>
+		<en>extended hud and functions</en>
     </title>
     <description>
         <en>
@@ -26,7 +26,16 @@
         <sourceFile filename="scripts/AnimalToProductionTrigger.lua" />
         <sourceFile filename="scripts/AnimalMoveProductionEvent.lua" />
         <sourceFile filename="scripts/AnimalScreenTrailerProduction.lua" />
+		<sourceFile filename="scripts/register.lua" />
     </extraSourceFiles>
+	
+	<placeableSpecializations>
+        <specialization name="siloDisplays" className="SiloDisplays" filename="scripts/SiloDisplays.lua"/>    
+		<specialization name="productionPointDisplays" className="ProductionPointDisplays" filename="scripts/ProductionPointDisplays.lua"/>    	
+		<specialization name="manureHeapDisplays" className="ManureHeapDisplays" filename="scripts/ManureHeapDisplays.lua"/> 
+		<specialization name="bunkerSiloDisplays" className="BunkerSiloDisplays" filename="scripts/BunkerSiloDisplays.lua"/>
+		<specialization name="husbandryDisplays" className="HusbandryDisplays" filename="scripts/HusbandryDisplays.lua"/>	
+    </placeableSpecializations>
 	
 	<l10n filenamePrefix="languages/l10n" />
 </modDesc>

@@ -40,8 +40,7 @@ function AdvancedHusbandryInfo:updateFoodDisplay(superFunc, husbandry)
 			totalValue = totalValue + info.value
 
 			self.foodLabel[index]:setText(info.title)
-			---total food ---
-			--self.foodValue[index]:setText(valueText .. " / " .. self.l10n:formatVolume(totalCapacity, 0) .. " [ " .. self.l10n:formatVolume((totalCapacity-totalValue), 0) .. " ]")
+			---total food ---			
 			self.foodValue[index]:setText(valueText .. " [ " .. self.l10n:formatVolume(totalCapacity, 0) .. " ]")
 			AdvancedHusbandryInfo:setTextColor(self.foodValue[index], info.ratio, info.invertedBar)
 			self:setStatusBarValue(self.foodStatusBar[index], info.ratio, info.invertedBar)
@@ -53,9 +52,8 @@ function AdvancedHusbandryInfo:updateFoodDisplay(superFunc, husbandry)
 
 	if totalCapacity > 0 then
 		totalRatio = totalValue / totalCapacity
-	end
+	end	
 	
-	--self.foodRowTotalValue:setText(totalValueText .. " / " .. self.l10n:formatVolume(totalCapacity, 0) .. " [ " .. self.l10n:formatVolume((totalCapacity-totalValue), 0) .. " ]")
 	self.foodRowTotalValue:setText(totalValueText .. " [ " .. self.l10n:formatVolume(totalCapacity, 0) .. " ]")
 	self:setStatusBarValue(self.foodRowTotalStatusBar, totalRatio, false)
 	AdvancedHusbandryInfo:setTextColor(self.foodRowTotalValue, totalRatio, false)
@@ -79,7 +77,6 @@ function AdvancedHusbandryInfo:updateConditionDisplay(superFunc, husbandry)
 				fillGrade = info.value / info.palletcapacity * 100
 			elseif info.capacity ~= nil then
 				--- set text for all other filltypes than productivity ---
-				--valueText = valueText .. " / " .. self.l10n:formatVolume(info.capacity, 0) .. " [ " .. self.l10n:formatVolume((info.capacity-info.value), 0) .. " ]"
 				valueText = valueText .. " [ " .. self.l10n:formatVolume(info.capacity, 0) .. " ]"
 				fillGrade = info.value / info.capacity *100				
 			end
@@ -251,7 +248,6 @@ function AdvancedHusbandryInfo:updateInfoFood(superFunc, superFunc, infoTable)
 	local spec = self.spec_husbandryFood
 	local fillLevel = self:getTotalFood()
 	local maxFillLevel = self:getFoodCapacity()
-	--spec.info.text = string.format("%d l", fillLevel) .. " [ " .. string.format("%d l", maxFillLevel) .. " ]"
 	spec.info.text = g_i18n:formatVolume(fillLevel, 0) .. " [ " .. g_i18n:formatVolume(maxFillLevel, 0) .. " ]"
 
 	table.insert(infoTable, spec.info)
@@ -263,7 +259,6 @@ function AdvancedHusbandryInfo:updateInfoLiquidManure(superFunc, superFunc, info
 	local spec = self.spec_husbandryLiquidManure
 	local fillLevel = self:getHusbandryFillLevel(spec.fillType)
 	local maxFillLevel = self:getHusbandryCapacity(spec.fillType)
-	--spec.info.text = string.format("%d l", fillLevel) .. " [ " .. string.format("%d l", maxFillLevel) .. " ]"
 	spec.info.text = g_i18n:formatVolume(fillLevel, 0) .. " [ " .. g_i18n:formatVolume(maxFillLevel, 0) .. " ]"
 
 	table.insert(infoTable, spec.info)
@@ -276,7 +271,6 @@ function AdvancedHusbandryInfo:updateInfoMilk(superFunc, superFunc, infoTable)
 
 	local fillLevel = self:getHusbandryFillLevel(spec.fillType)
 	local maxFillLevel = self:getHusbandryCapacity(spec.fillType)
-	--spec.info.text = string.format("%d l", fillLevel) .. " [ " .. string.format("%d l", maxFillLevel) .. " ]"
 	spec.info.text = g_i18n:formatVolume(fillLevel, 0) .. " [ " .. g_i18n:formatVolume(maxFillLevel, 0) .. " ]"
 
 	table.insert(infoTable, spec.info)
@@ -287,8 +281,7 @@ function AdvancedHusbandryInfo:updateInfoStraw(superFunc, superFunc, infoTable)
 
 	local spec = self.spec_husbandryStraw
 	local fillLevel = self:getHusbandryFillLevel(spec.inputFillType)
-	local maxFillLevel = self:getHusbandryCapacity(spec.inputFillType)
-	--spec.info.text = string.format("%d l", fillLevel) .. " [ " .. string.format("%d l", maxFillLevel) .. " ]"	
+	local maxFillLevel = self:getHusbandryCapacity(spec.inputFillType)	
 	spec.info.text = g_i18n:formatVolume(fillLevel, 0) .. " [ " .. g_i18n:formatVolume(maxFillLevel, 0) .. " ]"	
 
 	table.insert(infoTable, spec.info)
@@ -300,8 +293,6 @@ function AdvancedHusbandryInfo:updateInfoWater(superFunc, superFunc, infoTable)
 	local spec = self.spec_husbandryWater
 
 	if not spec.automaticWaterSupply then
-		--local fillLevel = self:getHusbandryFillLevel(spec.fillType)
-		--spec.info.text = string.format("%d l", fillLevel)
 		local fillLevel = self:getHusbandryFillLevel(spec.fillType)
 		local maxFillLevel = self:getHusbandryCapacity(spec.fillType)
 		spec.info.text = g_i18n:formatVolume(fillLevel, 0) .. " [ " .. g_i18n:formatVolume(maxFillLevel, 0) .. " ]"	
@@ -321,7 +312,6 @@ function AdvancedHusbandryInfo:updateInfoManureHeap(superFunc, superFunc, infoTa
 
 	local fillLevel = spec.manureHeap:getFillLevel(spec.manureHeap.fillTypeIndex)
 	local maxFillLevel = spec.manureHeap:getCapacity(spec.manureHeap.fillTypeIndex)
-	--spec.infoFillLevel.text = string.format("%d l", fillLevel) .. " [ " .. string.format("%d l", maxFillLevel) .. " ]"
 	spec.infoFillLevel.text = g_i18n:formatVolume(fillLevel, 0) .. " [ " .. g_i18n:formatVolume(maxFillLevel, 0) .. " ]"
 
 	table.insert(infoTable, spec.infoFillLevel)
@@ -329,17 +319,19 @@ end
 
 function AdvancedHusbandryInfo:updateInfoFeedingRobot(superFunc, infoTable)
 	if self.infos ~= nil then
-		for _, info in ipairs(self.infos) do
+		for _, info in ipairs(self.infos) do			
 			local fillLevel = 0
 			local maxFillLevel = 0
 			
 			for _, fillType in ipairs(info.fillTypes) do
-				fillLevel = fillLevel + self:getFillLevel(fillType)
-				local unloadingSpot = self.fillTypeToUnloadingSpot[fillType]
-				maxFillLevel = unloadingSpot.capacity or 0
+				--fillLevel = fillLevel + self:getFillLevel(fillType)
+				local unloadingSpot = self.fillTypeToUnloadingSpot[fillType]				
+				if unloadingSpot ~= nil then
+					fillLevel = unloadingSpot.fillLevel or 0
+					maxFillLevel = unloadingSpot.capacity or 0				
+				end
 			end
 
-			--info.text = string.format("%d l", fillLevel)
 			info.text = g_i18n:formatVolume(fillLevel, 0) .. " [ " .. g_i18n:formatVolume(maxFillLevel, 0) .. " ]"	
 
 			table.insert(infoTable, info)
@@ -350,9 +342,7 @@ end
 function AdvancedHusbandryInfo:getTitleForSectionHeader(superFunc, list, section)
 	local husbandry = self.sortedHusbandries[section]
 
-	return husbandry:getName() .. " - " .. husbandry:getNumOfAnimals() .. " [ " .. husbandry:getMaxNumOfAnimals() .. " ]"
-	--:getMaxNumOfAnimals()
-	--:getNumOfAnimals()
+	return husbandry:getName() .. " - " .. husbandry:getNumOfAnimals() .. " [ " .. husbandry:getMaxNumOfAnimals() .. " ]"	
 end
 
 
@@ -362,7 +352,6 @@ function AdvancedHusbandryInfo:updateInfoPlaceableHusbandryBedding(superFunc, su
 	local spec = self.spec_husbandryBedding
 	local fillLevel = self:getHusbandryFillLevel(spec.inputFillType)
 	local maxFillLevel = self:getHusbandryCapacity(spec.inputFillType)
-	--spec.info.text = string.format("%d l", fillLevel)
 	spec.info.text = g_i18n:formatVolume(fillLevel, 0) .. " [ " .. g_i18n:formatVolume(maxFillLevel, 0) .. " ]"	
 	table.insert(infoTable, spec.info)
 end
@@ -378,7 +367,6 @@ function AdvancedHusbandryInfo:updateInfoManureSeparator(superFunc, superFunc, i
 
 	local fillLevel = spec.separator:getFillLevel(spec.separator.fillTypeIndex)
 	local maxFillLevel = spec.separator:getCapacity(spec.separator.fillTypeIndex)
-	--spec.infoFillLevel.text = string.format("%d l", fillLevel)
 	spec.infoFillLevel.text = g_i18n:formatVolume(fillLevel, 0) .. " [ " .. g_i18n:formatVolume(maxFillLevel, 0) .. " ]"
 
 	table.insert(infoTable, spec.infoFillLevel)

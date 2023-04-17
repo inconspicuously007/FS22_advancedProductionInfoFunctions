@@ -714,7 +714,7 @@ end
 function AdvancedProductionPoint:setOutputDistributionMode(superFunc, outputFillTypeId, mode, noEventSend)
 	
 	if g_modIsLoaded.pdlc_pumpsAndHosesPack and self.owningPlaceable.isSandboxPlaceable ~= nil and self.owningPlaceable:isSandboxPlaceable() then		
-		return superFunc(self, outputFillTypeId, mode, noEventSend);
+		return superFunc(self, outputFillTypeId, mode, noEventSend)
 	end
 	
 	if self.outputFillTypeIds[outputFillTypeId] == nil then
@@ -742,11 +742,11 @@ function AdvancedProductionPoint:setOutputDistributionMode(superFunc, outputFill
 end
 
 function AdvancedProductionPoint:getOutputDistributionMode(superFunc, outputFillTypeId)
-	if self.outputFillTypeIdsDirectSell[outputFillTypeId] ~= nil then
+	if self.outputFillTypeIdsDirectSell ~= nil and self.outputFillTypeIdsDirectSell[outputFillTypeId] ~= nil then
 		return ProductionPoint.OUTPUT_MODE.DIRECT_SELL
-	elseif self.outputFillTypeIdsAutoDeliver[outputFillTypeId] ~= nil then
+	elseif self.outputFillTypeIdsAutoDeliver ~= nil and self.outputFillTypeIdsAutoDeliver[outputFillTypeId] ~= nil then
 		return ProductionPoint.OUTPUT_MODE.AUTO_DELIVER
-	elseif self.outputFillTypeIdsSpawnPallet[outputFillTypeId] ~= nil then
+	elseif self.outputFillTypeIdsSpawnPallet ~= nil and self.outputFillTypeIdsSpawnPallet[outputFillTypeId] ~= nil then
 		return ProductionPoint.OUTPUT_MODE.SPAWN_PALLET
 	end
 
@@ -997,8 +997,8 @@ function AdvancedProductionPoint:updateInfo(superFunc, superFunc, infoTable)
 		if fillLevel > 1 then
 			fillTypesDisplayed = true
 			local fillTypeTitle = g_fillTypeManager:getFillTypeTitleByIndex(fillType)
-			local fillTypeDesc = g_fillTypeManager:getFillTypeByIndex(fillType)
-			--local titleInfo = nil
+			local fillTypeDesc = g_fillTypeManager:getFillTypeByIndex(fillType)			
+			
 			if g_currentMission.animalSystem:getSubTypeByFillTypeIndex(fillType) ~= nil then
 				fillTypeTitle = g_currentMission.animalSystem:getSubTypeByFillTypeIndex(fillType).visuals[1].store.name
 			end
@@ -1022,11 +1022,13 @@ function AdvancedProductionPoint:updateInfo(superFunc, superFunc, infoTable)
 		fillLevel = self:getFillLevel(fillType)
 		
 		if not self.inputFillTypeIds[fillType] and fillLevel > 1 then
+			local fillTypeDesc = g_fillTypeManager:getFillTypeByIndex(fillType)	
 			fillTypesDisplayed = true			 
 			
 			table.insert(infoTable, {
 				title = g_fillTypeManager:getFillTypeTitleByIndex(fillType),
-				text = g_i18n:formatVolume(fillLevel, 0) .. " [ " .. g_i18n:formatVolume(self:getCapacity(fillType), 0) .. " ]"
+				--text = g_i18n:formatVolume(fillLevel, 0) .. " [ " .. g_i18n:formatVolume(self:getCapacity(fillType), 0) .. " ]"
+				text = string.trim(g_i18n:formatVolume(fillLevel, 0, fillTypeDesc.unitShort)) .. " [ " .. string.trim(g_i18n:formatVolume(self:getCapacity(fillType), 0, fillTypeDesc.unitShort)) .. " ]"
 			})
 		end
 	end
