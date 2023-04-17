@@ -23,35 +23,7 @@ function AnimalScreenTrailerProduction:initSourceItems()
 end
 
 function AnimalScreenTrailerProduction:initTargetItems()
-    self.targetItems = {}
-    --[[local clusters = {}
-    for key, animalSubType in pairs(self.production.supportedAnimalSubTypes) do
-        local cluster = g_currentMission.animalSystem:createClusterFromSubTypeIndex(animalSubType.subTypeIndex)
-        cluster.numAnimals = 10
-        cluster.age = 36
-        table.insert(clusters, cluster)
-        print("Debug: AnimalScreenTrailerProduction:initTargetItems")
-        DebugUtil.printTableRecursively(cluster,"_",0,2)
-    end
-
-    if clusters ~= nil then
-        for _, cluster in ipairs(clusters) do
-            local item = AnimalItemStock.new(cluster)
-
-            table.insert(self.targetItems, item)
-        end
-    end]]
-
-    --[[local clusters = self.husbandry:getClusters()
-
-    if clusters ~= nil then
-        for _, cluster in ipairs(clusters) do
-            local item = AnimalItemStock.new(cluster)
-
-            table.insert(self.targetItems, item)
-        end
-    end]]
-    --TODO
+    self.targetItems = {}    
 end
 
 function AnimalScreenTrailerProduction:getSourceName()
