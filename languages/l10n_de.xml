@@ -37,11 +37,12 @@
 		<text name="modsetting_ui_fillLevelColored_none" text="Giants-Standard" />
 		<text name="modsetting_ui_fillLevelColored" text="Farbabstufung" />
 
-		<text name="advprod_ui_productionPoint" 			  text="Produktion" />
-		<text name="advprod_ui_moveToProduction" 			  text="In die Produktion ausladen" />
-		<text name="advprod_ui_confirmMoveToProduction"		  text="Sollen diese %d Tiere (%s) in die Produktion ausgeladen werden?"/>
-		<text name="advprod_ui_movedToProduction"			  text="Die Tiere wurden in die Produktion ausgeladen!"/>
-		<text name="advprod_ui_messageProductionDoesNotExist" text="Die Produktion existiert nicht mehr!"/>
+		<text name="advprod_ui_productionPoint" 			  		text="Produktion" />
+		<text name="advprod_ui_moveToProduction" 			  		text="In die Produktion ausladen" />
+		<text name="advprod_ui_confirmMoveToProduction"		  		text="Sollen diese %d Tiere (%s) in die Produktion ausgeladen werden?"/>
+		<text name="advprod_ui_movedToProduction"			  		text="Die Tiere wurden in die Produktion ausgeladen!"/>
+		<text name="advprod_ui_messageNoLoadingTrailer"		  		text="Keinen Tiertransporter gefunden!"/>
+		<text name="advprod_ui_messageProductionDoesNotExist" 		text="Die Produktion existiert nicht mehr!"/>
 		<text name="advprod_ui_messageAnimalTypeNotSupportedAge" 	text="Ausladen nicht möglich. Diese Tierart hat noch nicht das passende Alter!"/>
 		<text name="advprod_ui_messageAnimalTypeNotSupportedHealth" text="Ausladen nicht möglich. Diese Tierart ist nicht ausreichend gesund!"/>
 	</texts>

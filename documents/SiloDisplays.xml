@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" standalone="no" ?>
+<siloDisplays>	
+	<display farmId="farmId|1|blank" rootNode="node" font="fontname|DIGIT" mask="mask|0000000" size="size|0.05" scaleX="scale|0.5" scaleY="scale|0.5" color="color|1 0.5 0.25 1" hiddenColor="color|0.060 0.003 0.003 1" emissiveScale="scale|0.75" titleAlignment="alignemnt|LEFT" fillLevelAlignment="alignemnt|RIGHT" capacityAlignment="alignemnt|RIGHT">
+		<displayLine headLineNode="node|blank" headLineType="optional|farmName|placeableName" headLineText="Freitext|default:Farm-Name" lineTitleAlignment="alignemnt|CENTER" lineSize="optional|default:size of root display" /><!-- represents the name of the farm -->
+		<displayLine fillType="filltype" titleNode="node|blank" fillLevelNode="node|blank" capacityNode="node|blank" lineSize="optional|default:size of root display" lineTitleTextSize="optional|default:size of root display" lineFillLevelTextSize="optional|default:size of root display" lineScaleX="optional" lineScaleY="optional" lineEmissiveScale="optional" lineColor="optional" lineFillLevelAlignment="optional" lineTitleAlignment="optional" lineCapacityAlignment="optional" lineFont="optional" lineMask="optional"/>		
+	</display>		
+</siloDisplays>

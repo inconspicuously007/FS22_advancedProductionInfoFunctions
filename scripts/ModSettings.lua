@@ -61,7 +61,7 @@ function ModSettings:checkIsHost()
 	end
 end
 
-function ModSettings:loadUserSettings()
+function ModSettings:loadUserSettings()	
 	--print("loadUserSettings")
 	local xmlFile = XMLFile.loadIfExists("localXmlFile", ModSettings.userFilePath, ModSettings.name)
 	if xmlFile ~= nil then

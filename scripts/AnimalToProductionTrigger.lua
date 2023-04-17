@@ -1,7 +1,6 @@
 AnimalToProductionTrigger = {}
 local AnimalToProductionTrigger_mt = Class(AnimalToProductionTrigger)
 
---InitStaticObjectClass(AnimalToProductionTrigger, "AnimalToProductionTrigger", ObjectIds.OBJECT_ANIMAL_TO_PRODUCTION_TRIGGER)
 InitObjectClass(AnimalToProductionTrigger, "AnimalToProductionTrigger")
 
 function AnimalToProductionTrigger:onCreate(id)
@@ -127,7 +126,7 @@ end
 function AnimalToProductionTrigger:showAnimalScreen(production)
     if self.loadingVehicle == nil then
         g_gui:showInfoDialog({
-            text = g_i18n:getText("shop_messageNoLoadingTrailer")
+            text = g_i18n:getText("advprod_ui_messageNoLoadingTrailer")
         })
 
         return
