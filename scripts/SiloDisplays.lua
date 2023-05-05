@@ -500,14 +500,9 @@ function SiloDisplays:updateDisplayLines(initial)
 							if displayLine.fillLevelNodeVis25 ~= nil then setVisibility(displayLine.fillLevelNodeVis25, false) end	
 						end
 						if freeCapacity < 1 and (displayLine.siloFillWarnType == 1 or displayLine.siloFillWarnType == 3) then
-							statWarn = true	
-							--if displayLine.fillLevelNodeVis25 ~= nil then setVisibility(displayLine.fillLevelNodeVis25, false) end
+							statWarn = true
 							if displayLine.fillLevelNodeVis100 ~= nil then setVisibility(displayLine.fillLevelNodeVis100, false) end
 						end
-						--if displayLine.siloFillWarnType == 3 and freeCapacity > 1 and intFill > 1 then
-						--	statWarn = true
-						--	--if displayLine.fillLevelNodeVis100 ~= nil then setVisibility(displayLine.fillLevelNodeVis100, false) end	
-						--end
 						setVisibility(displayLine.siloFillWarnNode, statWarn)
 					end						
 				end				
