@@ -12,9 +12,15 @@ function BunkerSiloDisplays.registerEventListeners(placeableType)
 end
 
 function BunkerSiloDisplays.registerFunctions(placeableType)
-  SpecializationUtil.registerFunction(placeableType, "updateDisplayLines", BunkerSiloDisplays.updateDisplayLines)
-  SpecializationUtil.registerFunction(placeableType, "renderDisplayTexts", BunkerSiloDisplays.renderDisplayTexts)
-  SpecializationUtil.registerFunction(placeableType, "checkRenderDistance", BunkerSiloDisplays.checkRenderDistance)
+	if placeableType.functions["updateDisplayLines"] == nil then
+		SpecializationUtil.registerFunction(placeableType, "updateDisplayLines", BunkerSiloDisplays.updateDisplayLines)
+	end
+	if placeableType.functions["renderDisplayTexts"] == nil then
+		SpecializationUtil.registerFunction(placeableType, "renderDisplayTexts", BunkerSiloDisplays.renderDisplayTexts)
+	end
+	if placeableType.functions["checkRenderDistance"] == nil then
+		SpecializationUtil.registerFunction(placeableType, "checkRenderDistance", BunkerSiloDisplays.checkRenderDistance)
+	end
 end
 
 function BunkerSiloDisplays.registerXMLPaths(schema, basePath)
@@ -392,7 +398,6 @@ function BunkerSiloDisplays:renderDisplayTexts()
 						rendTxt = displayLine.fillType.title
 						rendTxtSize = displayLine.titleTextSize
 						if displayLine.titleMaxLength~= nil and displayLine.titleMaxLength > 1 and utf8Strlen(rendTxt) > displayLine.titleMaxLength then
-							--rendTxt = utf8Substr(rendTxt, 0, math.max(utf8Strlen(rendTxt) - 3, displayLine.titleMaxLength - 3)) .. "..."
 							rendTxt = utf8Substr(rendTxt, 0, displayLine.titleMaxLength - 3) .. "..."
 						end
 					end

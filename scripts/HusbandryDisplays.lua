@@ -12,9 +12,15 @@ function HusbandryDisplays.registerEventListeners(placeableType)
 end
 
 function HusbandryDisplays.registerFunctions(placeableType)
-  SpecializationUtil.registerFunction(placeableType, "updateDisplayLines", HusbandryDisplays.updateDisplayLines)
-  SpecializationUtil.registerFunction(placeableType, "renderDisplayTexts", HusbandryDisplays.renderDisplayTexts)
-  SpecializationUtil.registerFunction(placeableType, "checkRenderDistance", HusbandryDisplays.checkRenderDistance)
+	if placeableType.functions["updateDisplayLines"] == nil then
+		SpecializationUtil.registerFunction(placeableType, "updateDisplayLines", HusbandryDisplays.updateDisplayLines)
+	end
+	if placeableType.functions["renderDisplayTexts"] == nil then
+		SpecializationUtil.registerFunction(placeableType, "renderDisplayTexts", HusbandryDisplays.renderDisplayTexts)
+	end
+	if placeableType.functions["checkRenderDistance"] == nil then
+		SpecializationUtil.registerFunction(placeableType, "checkRenderDistance", HusbandryDisplays.checkRenderDistance)
+	end
 end
 
 function HusbandryDisplays.registerXMLPaths(schema, basePath)
@@ -239,8 +245,16 @@ function HusbandryDisplays:onLoad(savegame)
 					
 					local lineFillTypeName = xmlFile:getString(displayLineKey .. "#fillType", nil)					
 					local lineFillType = nil
+					local lineFillTypeTitle = nil
 					if lineFillTypeName ~= nil then
 						lineFillType = g_fillTypeManager:getFillTypeByName(lineFillTypeName)
+						if lineFillType == nil then Logging.error("Could not find fillType for given name '%s'!", lineFillTypeName) end
+						if lineFillType ~= nil then
+							lineFillTypeTitle = lineFillType.title
+							if lineTitleMaxLen~= nil and lineTitleMaxLen > 1 and utf8Strlen(lineFillTypeTitle) > lineTitleMaxLen then
+								lineFillTypeTitle = utf8Substr(lineFillTypeTitle, 0, lineTitleMaxLen - 3) .. "..."
+							end
+						end
 					end
 					
 					local displayLine = {
@@ -261,6 +275,7 @@ function HusbandryDisplays:onLoad(savegame)
 						titleMaxLength = lineTitleMaxLen,
 						fillLevelTextSize = lineFillLevelTextSize,
 						fillType = lineFillType,
+						fillTypeTitle = lineFillTypeTitle,
 						farmId = displayOwnerFarm,
 						scaleX = lineTextScaleX,
 						scaleY = lineTextScaleY,
@@ -286,21 +301,6 @@ function HusbandryDisplays:onLoad(savegame)
 					
 					if displayLine.iconNode ~= nil and displayLine.fillType ~= nil then
 						setVisibility(displayLine.iconNode, false)
-						--TODO--
-						--local iconMaterial = g_materialManager:getMaterial(displayLine.fillType.index, "icon", 1)
-						--print("Debug: displayLine.fillType")
-						--DebugUtil.printTableRecursively(displayLine.fillType,"_",0,3)
-						--print("Debug: g_materialManager")
-						--DebugUtil.printTableRecursively(g_materialManager,"_",0,3)
-						--if iconMaterial ~= nil then
-						--	setMaterial(displayLine.iconNode, iconMaterial, 0)
-						--	local iconColorVector = StringUtil.getVectorNFromString({0.8, 0.8, 0.8, 1}, 4)
-						--	if iconColorVector ~= nil then
-						--		setShaderParameter(slot.icon.node, "iconColor", iconColorVector[1], iconColorVector[2], iconColorVector[3], iconColorVector[4] or 1, false)
-						--		setVisibility(displayLine.iconNode, true)
-						--	end
-						--	
-						--end
 					end
 					
 					if displayLine.fillLevelNode ~= nil then --and displayLine.fillType ~= nil then						
@@ -321,7 +321,7 @@ function HusbandryDisplays:onFinalizePlacement(savegame)
 	local spec = self.spec_husbandryDisplays
 	if spec.husbandryHasDisplays then		
 		function spec.fillLevelChangedCallback(fillType, delta)
-			self:updateDisplayLines(false)
+			self:updateDisplayLines(false, fillType)
 		end		
 		for _, sourceStorage in pairs(self.spec_husbandry.loadingStation:getSourceStorages()) do				
 			sourceStorage:addFillLevelChangedListeners(spec.fillLevelChangedCallback)
@@ -334,7 +334,7 @@ function HusbandryDisplays:onPostFinalizePlacement(savegame)
 	if spec.husbandryHasDisplays then		
 		table.insert(HusbandryDisplays.displays, self)		
 	end
-	self:updateDisplayLines(true)	
+	self:updateDisplayLines(true, nil)
 end
 
 function HusbandryDisplays:onDelete()
@@ -430,7 +430,6 @@ function HusbandryDisplays:renderDisplayTexts()
 						rendTxt = displayLine.fillType.title
 						rendTxtSize = displayLine.titleTextSize
 						if displayLine.titleMaxLength~= nil and displayLine.titleMaxLength > 1 and utf8Strlen(rendTxt) > displayLine.titleMaxLength then
-							--rendTxt = utf8Substr(rendTxt, 0, math.max(utf8Strlen(rendTxt) - 3, displayLine.titleMaxLength - 3)) .. "..."
 							rendTxt = utf8Substr(rendTxt, 0, displayLine.titleMaxLength - 3) .. "..."
 						end
 					end
@@ -440,18 +439,21 @@ function HusbandryDisplays:renderDisplayTexts()
 						setTextAlignment(displayLine.titleAlignment)			
 						renderText3D(transX, transY, transZ, rotX, rotY, rotZ, rendTxtSize, rendTxt)
 					end
-					if initValues == true then self:updateDisplayLines() end	
+					if initValues == true then self:updateDisplayLines(true, nil) end
 				end
 			end
 		end		
 	end
 end
 
-function HusbandryDisplays:updateDisplayLines(initial)
+function HusbandryDisplays:updateDisplayLines(initial, fillTypeIndex)
 	--if self.isClient then	
 	if g_dedicatedServer == nil then
 		for _, displayLine in pairs(self.spec_husbandryDisplays.husbandryDisplayLines) do
-			if displayLine.rootNodeActive == true then
+			local check = false
+			if initial ~= nil and initial == false and fillTypeIndex ~= nil and displayLine.fillType ~= nil and displayLine.fillType.index ~= nil and fillTypeIndex == displayLine.fillType.index then check = true end
+			if initial ~= nil and initial == true then check = true end
+			if displayLine.rootNodeActive == true and check == true then
 				if displayLine.fillLevelCharacterLine ~= nil then
 					local fillLevel = 0
 					if displayLine.fillLevelType ~= nil then  
@@ -463,9 +465,6 @@ function HusbandryDisplays:updateDisplayLines(initial)
 								fillLevel = self.spec_husbandryFeedingRobot.feedingRobot.fillTypeToUnloadingSpot[displayLine.fillType.index].fillLevel or 0
 							else
 								Logging.error("Could not find fillType '%s' for display. Check husbandryDisplays at '%s'!", displayLine.fillType.name, self.spec_husbandryFeedingRobot.feedingRobot.owner:getName())
-								--print("Debug: HusbandryDisplay")
-								--printf("FillType: '%s' -- '%s'", displayLine.fillType.index,displayLine.fillType.name)
-								--DebugUtil.printTableRecursively(self.spec_husbandryFeedingRobot.feedingRobot.owner,"_",0,3)
 							end
 						end
 						if displayLine.fillLevelType == "husbandryFood" then

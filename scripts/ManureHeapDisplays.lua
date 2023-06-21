@@ -12,9 +12,15 @@ function ManureHeapDisplays.registerEventListeners(placeableType)
 end
 
 function ManureHeapDisplays.registerFunctions(placeableType)
-  SpecializationUtil.registerFunction(placeableType, "updateDisplayLines", ManureHeapDisplays.updateDisplayLines)
-  SpecializationUtil.registerFunction(placeableType, "renderDisplayTexts", ManureHeapDisplays.renderDisplayTexts)
-  SpecializationUtil.registerFunction(placeableType, "checkRenderDistance", ManureHeapDisplays.checkRenderDistance)
+	if placeableType.functions["updateDisplayLines"] == nil then
+		SpecializationUtil.registerFunction(placeableType, "updateDisplayLines", ManureHeapDisplays.updateDisplayLines)
+	end
+	if placeableType.functions["renderDisplayTexts"] == nil then
+		SpecializationUtil.registerFunction(placeableType, "renderDisplayTexts", ManureHeapDisplays.renderDisplayTexts)
+	end
+	if placeableType.functions["checkRenderDistance"] == nil then
+		SpecializationUtil.registerFunction(placeableType, "checkRenderDistance", ManureHeapDisplays.checkRenderDistance)
+	end
 end
 
 function ManureHeapDisplays.registerXMLPaths(schema, basePath)
@@ -264,21 +270,6 @@ function ManureHeapDisplays:onLoad(savegame)
 					
 					if displayLine.iconNode ~= nil and displayLine.fillType ~= nil then
 						setVisibility(displayLine.iconNode, false)
-						--TODO--
-						--local iconMaterial = g_materialManager:getMaterial(displayLine.fillType.index, "icon", 1)
-						--print("Debug: displayLine.fillType")
-						--DebugUtil.printTableRecursively(displayLine.fillType,"_",0,3)
-						--print("Debug: g_materialManager")
-						--DebugUtil.printTableRecursively(g_materialManager,"_",0,3)
-						--if iconMaterial ~= nil then
-						--	setMaterial(displayLine.iconNode, iconMaterial, 0)
-						--	local iconColorVector = StringUtil.getVectorNFromString({0.8, 0.8, 0.8, 1}, 4)
-						--	if iconColorVector ~= nil then
-						--		setShaderParameter(slot.icon.node, "iconColor", iconColorVector[1], iconColorVector[2], iconColorVector[3], iconColorVector[4] or 1, false)
-						--		setVisibility(displayLine.iconNode, true)
-						--	end
-						--	
-						--end
 					end
 					
 					if displayLine.fillLevelNode ~= nil and displayLine.fillType ~= nil then						
@@ -405,7 +396,6 @@ function ManureHeapDisplays:renderDisplayTexts()
 						rendTxt = displayLine.fillType.title
 						rendTxtSize = displayLine.titleTextSize
 						if displayLine.titleMaxLength~= nil and displayLine.titleMaxLength > 1 and utf8Strlen(rendTxt) > displayLine.titleMaxLength then
-							--rendTxt = utf8Substr(rendTxt, 0, math.max(utf8Strlen(rendTxt) - 3, displayLine.titleMaxLength - 3)) .. "..."
 							rendTxt = utf8Substr(rendTxt, 0, displayLine.titleMaxLength - 3) .. "..."
 						end
 					end
