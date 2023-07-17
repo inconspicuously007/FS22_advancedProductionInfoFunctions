@@ -1,5 +1,5 @@
 # FS22_advancedProductionInfoFunctions
 
-aktuelle Version: **0.11.0.43**
+aktuelle Version: **0.11.0.44**
 
 Direkter Download: [FS22_advancedProductionInfoFunctions](https://github.com/inconspicuously007/FS22_advancedProductionInfoFunctions/releases/latest/download/FS22_advancedProductionInfoFunctions.zip)
