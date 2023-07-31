@@ -20,16 +20,12 @@ function AdvancedSiloDialog:setFillLevels(superFunc, fillLevels, hasInfiniteCapa
 		
 		if level > 0 then
 			table.insert(fillTypesTable, name)
-			table.insert(self.fillTypeMapping, fillTypeIndex)
+			table.insert(self.fillTypeMapping, fillTypeIndex)		
+			if fillTypeIndex == self.lastSelectedFillType then
+				selectedId = numFillLevels
+			end
 			numFillLevels = numFillLevels + 1
-		end	
-		
-
-		if fillTypeIndex == self.lastSelectedFillType then
-			selectedId = numFillLevels
-		end
-
-		
+		end		
 	end
 
 	self.fillTypesElement:setTexts(fillTypesTable)
