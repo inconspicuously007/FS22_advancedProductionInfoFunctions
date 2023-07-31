@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no" ?>
 <modDesc descVersion="72">
     <author>Sly</author>
-    <version>0.11.0.41</version>
+    <version>0.11.0.45</version>
     <title>
 		<de>Erweiterte Anzeigen und Funktionen</de>
 		<en>extended hud and functions</en>
@@ -22,6 +22,7 @@
 		<sourceFile filename="scripts/AdvancedProductionPointInfo.lua" />
 		<sourceFile filename="scripts/AdvancedHusbandryInfo.lua" />
 		<sourceFile filename="scripts/AdvancedSiloInfo.lua" />		
+		<sourceFile filename="scripts/AdvancedSiloDialog.lua" />
 		<sourceFile filename="scripts/AdvancedProductionPointPalletSpawner.lua" />
         <sourceFile filename="scripts/AnimalToProductionTrigger.lua" />
         <sourceFile filename="scripts/AnimalMoveProductionEvent.lua" />
