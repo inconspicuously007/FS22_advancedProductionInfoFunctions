@@ -7,13 +7,18 @@ ProductionPoint.PROD_STATUS_TO_L10N[ProductionPoint.PROD_STATUS.PAUSED] = "advpr
 
 
 local function registerProductionPointOutputMode(name, value)
-	name = name:upper()
-
+	name = name:upper()	
 	if ProductionPoint.OUTPUT_MODE[name] == nil then
 		if value == nil then
 			value = 0
 
 			for _, mode in pairs(ProductionPoint.OUTPUT_MODE) do
+				if value < mode then
+					value = mode
+				end
+			end
+			
+			for _, mode in pairs(pdlc_pumpsAndHosesPack.SandboxProductionPoint.OUTPUT_MODE) do
 				if value < mode then
 					value = mode
 				end
@@ -753,18 +758,16 @@ function AdvancedProductionPoint:getOutputDistributionMode(superFunc, outputFill
 	return ProductionPoint.OUTPUT_MODE.KEEP
 end
 
-function AdvancedProductionPoint:toggleOutputDistributionMode(superFunc, outputFillTypeId)
-	
+function AdvancedProductionPoint:toggleOutputDistributionMode(superFunc, outputFillTypeId)	
 	if self.outputFillTypeIds[outputFillTypeId] ~= nil then
 		local curMode = self:getOutputDistributionMode(outputFillTypeId)
-		if g_modIsLoaded.pdlc_pumpsAndHosesPack and self.owningPlaceable.isSandboxPlaceable ~= nil and self.owningPlaceable:isSandboxPlaceable() then		
-			
+		if g_modIsLoaded.pdlc_pumpsAndHosesPack and self.owningPlaceable.isSandboxPlaceable ~= nil and self.owningPlaceable:isSandboxPlaceable() then
 			if table.hasElement(ProductionPoint.OUTPUT_MODE, curMode + 1) then
 				self:setOutputDistributionMode(outputFillTypeId, curMode + 1)
 			else
 				self:setOutputDistributionMode(outputFillTypeId, 0)
 			end
-		else			
+		else
 			local nextMode = 0
 			local defaultMode = 0
 			self.waitToSpawnAfterToggle[outputFillTypeId] = nil
@@ -779,8 +782,7 @@ function AdvancedProductionPoint:toggleOutputDistributionMode(superFunc, outputF
 			
 			if nextMode == ProductionPoint.OUTPUT_MODE.SPAWN_PALLET and self.outputFillTypeIdsToPallets[outputFillTypeId] == nil then
 				nextMode = defaultMode			
-			end		
-			
+			end
 			if nextMode == ProductionPoint.OUTPUT_MODE.SPAWN_PALLET then
 				self.waitToSpawnAfterToggle[outputFillTypeId] = g_time + AdvancedProductionPoint.WAIT_AFTER_TOGGLE
 			end

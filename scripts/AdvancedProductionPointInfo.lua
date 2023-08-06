@@ -153,15 +153,15 @@ function AdvancedProductionPointInfo:populateCellForItemInSection(superFunc, lis
 			if not isInput then
 				local outputMode = productionPoint:getOutputDistributionMode(fillType)
 				local outputModeText = g_i18n:getText("advprod_ui_production_output_storing")
-
+				
 				if outputMode == ProductionPoint.OUTPUT_MODE.DIRECT_SELL then
 					outputModeText = g_i18n:getText("ui_production_output_selling")
 				elseif outputMode == ProductionPoint.OUTPUT_MODE.AUTO_DELIVER then
 					outputModeText = g_i18n:getText("ui_production_output_distributing")
-				elseif outputMode == ProductionPoint.OUTPUT_MODE.SPAWN_PALLET then 
-					outputModeText = g_i18n:getText("advprod_ui_production_output_spawn_pallets")	
+				elseif outputMode == ProductionPoint.OUTPUT_MODE.SPAWN_PALLET then					
+					outputModeText = g_i18n:getText("advprod_ui_production_output_spawn_pallets")					
 				end
-
+				
 				cell:getAttribute("outputMode"):setText(outputModeText)
 			end
 
