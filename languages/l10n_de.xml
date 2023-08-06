@@ -45,5 +45,9 @@
 		<text name="advprod_ui_messageProductionDoesNotExist" 		text="Die Produktion existiert nicht mehr!"/>
 		<text name="advprod_ui_messageAnimalTypeNotSupportedAge" 	text="Ausladen nicht möglich. Diese Tierart hat noch nicht das passende Alter!"/>
 		<text name="advprod_ui_messageAnimalTypeNotSupportedHealth" text="Ausladen nicht möglich. Diese Tierart ist nicht ausreichend gesund!"/>
+		
+		<text name="advhusbandry_ui_consumption" 			  			text="Fütterungstyp" />
+		<text name="advhusbandry_ui_consume_parallel" 			  		text="Parallele Fütterung" />
+		<text name="advhusbandry_ui_consume_serial" 			  		text="Serielle Fütterung" />
 	</texts>
 </l10n>

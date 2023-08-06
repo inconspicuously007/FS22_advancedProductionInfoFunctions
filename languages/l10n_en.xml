@@ -36,5 +36,9 @@
 		<text name="modsetting_ui_title" text="advanced production functions settings" />
 		<text name="modsetting_ui_fillLevelColored_none" text="Giants-Default" />
 		<text name="modsetting_ui_fillLevelColored" text="Colored" />
+		
+		<text name="advhusbandry_ui_consumption" 			  			text="feeding type" />
+		<text name="advhusbandry_ui_consume_parallel" 			  		text="parallel consumption" />
+		<text name="advhusbandry_ui_consume_serial" 			  		text="serial consumption" />
 	</texts>
 </l10n>
