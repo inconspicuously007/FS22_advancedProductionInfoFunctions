@@ -24,26 +24,101 @@ function AdvancedHusbandryInfo:setTextColor(textElement, value, highIsDanger)
 	end
 end
 
+function AdvancedHusbandryInfo:getFoodInfos(superFunc, superFunc)
+	local foodInfos = superFunc(self)
+	local spec = self.spec_husbandryFood
+	local animalFood = g_currentMission.animalFoodSystem:getAnimalFood(spec.animalTypeIndex)
+
+	if animalFood ~= nil then
+		for _, foodGroup in pairs(animalFood.groups) do
+			local title = foodGroup.title
+			local fillLevel = 0
+			local capacity = spec.capacity			 
+			local foodGroupCapacity = 0
+			
+			for _, fillTypeIndex in pairs(foodGroup.fillTypes) do
+				if spec.fillLevels[fillTypeIndex] ~= nil then
+					fillLevel = fillLevel + spec.fillLevels[fillTypeIndex]
+				end
+			end
+			
+			local info = {
+				title = string.format("%s (%d%%)", title, MathUtil.round(foodGroup.productionWeight * 100)),
+				value = fillLevel,
+				capacity = capacity,
+				ratio = 0,
+				consumpt = animalFood.consumptionType,
+				groupCapacity = 0,
+				groupRatio = 0
+			}
+
+			if capacity > 0 then
+				info.ratio = fillLevel / capacity
+			end
+			
+			if animalFood.consumptionType == AnimalFoodSystem.FOOD_CONSUME_TYPE_PARALLEL then
+				foodGroupCapacity = MathUtil.round(foodGroup.productionWeight * capacity) 
+			else
+				foodGroupCapacity = capacity
+			end
+			
+			info.groupCapacity = foodGroupCapacity
+			
+			if foodGroupCapacity > 0 then
+				info.groupRatio = fillLevel / foodGroupCapacity
+			end
+			
+			table.insert(foodInfos, info)
+		end
+	end
+
+	return foodInfos
+end
+
+function AdvancedHusbandryInfo:getAnimalInfos(superFunc, superFunc, cluster)
+	local infos = superFunc(self)
+
+	cluster:addInfos(infos)
+	
+	local animalTypeIndex = self:getAnimalTypeIndex()
+	local animalFood = g_currentMission.animalFoodSystem:getAnimalFood(animalTypeIndex)
+	local infoConsumption = {
+		title = g_i18n:getText("advhusbandry_ui_consumption"),
+		valueText = g_i18n:getText("advhusbandry_ui_consume_serial"),
+		ratio = 0,
+		invertedBar = false,
+		disabled = true,
+		showStatusBar = false
+	}
+	if animalFood.consumptionType == AnimalFoodSystem.FOOD_CONSUME_TYPE_PARALLEL then infoConsumption.valueText = g_i18n:getText("advhusbandry_ui_consume_parallel") end
+	table.insert(infos, infoConsumption)
+	
+	return infos
+end
+
 function AdvancedHusbandryInfo:updateFoodDisplay(superFunc, husbandry)
 	local infos = husbandry:getFoodInfos()
 	local totalCapacity = 0
 	local totalValue = 0
-
+	local groupCapacity = 0
+	local consumptionType = 0
+	
 	for index, row in ipairs(self.foodRow) do
-		local info = infos[index]
-
+		local info = infos[index]		
 		row:setVisible(info ~= nil)
 
-		if info ~= nil then
+		if info ~= nil then			
 			local valueText = self.l10n:formatVolume(info.value, 0)
 			totalCapacity = info.capacity
+			groupCapacity = info.groupCapacity
 			totalValue = totalValue + info.value
-
+			
 			self.foodLabel[index]:setText(info.title)
 			---total food ---			
-			self.foodValue[index]:setText(valueText .. " [ " .. self.l10n:formatVolume(totalCapacity, 0) .. " ]")
-			AdvancedHusbandryInfo:setTextColor(self.foodValue[index], info.ratio, info.invertedBar)
-			self:setStatusBarValue(self.foodStatusBar[index], info.ratio, info.invertedBar)
+			self.foodValue[index]:setText(valueText .. " [ " .. self.l10n:formatVolume(groupCapacity, 0) .. " ]")
+			AdvancedHusbandryInfo:setTextColor(self.foodValue[index], info.groupRatio, info.invertedBar)
+			self:setStatusBarValue(self.foodStatusBar[index], info.groupRatio, info.invertedBar)
+			if consumptionType == 0 then consumptionType = info.consumpt end
 		end
 	end
 
@@ -57,7 +132,7 @@ function AdvancedHusbandryInfo:updateFoodDisplay(superFunc, husbandry)
 	self.foodRowTotalValue:setText(totalValueText .. " [ " .. self.l10n:formatVolume(totalCapacity, 0) .. " ]")
 	self:setStatusBarValue(self.foodRowTotalStatusBar, totalRatio, false)
 	AdvancedHusbandryInfo:setTextColor(self.foodRowTotalValue, totalRatio, false)
-	self.foodHeader:setText(string.format("%s (%s)", g_i18n:getText("ui_total"), g_i18n:getText("animals_foodMixEffectiveness")))
+	self.foodHeader:setText(string.format("%s (%s)", g_i18n:getText("ui_total"), g_i18n:getText("animals_foodMixEffectiveness")))	
 end
 
 function AdvancedHusbandryInfo:updateConditionDisplay(superFunc, husbandry)
@@ -86,6 +161,64 @@ function AdvancedHusbandryInfo:updateConditionDisplay(superFunc, husbandry)
 			self:setStatusBarValue(self.conditionStatusBar[index], info.ratio, info.invertedBar)
 		end
 	end
+end
+
+function AdvancedHusbandryInfo:displayCluster(superFunc, cluster, husbandry)
+	if not g_currentMission.isRunning then
+		return
+	end
+
+	local subTypeIndex = cluster:getSubTypeIndex()
+	local age = cluster:getAge()
+	local visual = g_currentMission.animalSystem:getVisualByAge(subTypeIndex, age)
+
+	if visual ~= nil then
+		local name = visual.store.name
+
+		if cluster.getName ~= nil then
+			name = cluster:getName()
+		end
+
+		self.animalDetailTypeNameText:setText(name)
+		self.animalDetailTypeImage:setImageFilename(visual.store.imageFilename)
+
+		local value = cluster:getSellPrice()
+		local priceText = self.l10n:formatMoney(value, 0, true, true)
+
+		self.animalDetailTypeValueText:setText(priceText)
+
+		local ageText = self.l10n:formatNumMonth(age)
+
+		self.animalAgeText:setText(ageText)
+
+		local infos = husbandry:getAnimalInfos(cluster)
+
+		for index, row in ipairs(self.infoRow) do
+			local info = infos[index]
+
+			row:setVisible(info ~= nil)
+
+			if info ~= nil then
+				local valueText = info.valueText or self.l10n:formatVolume(info.value, 0, info.customUnitText)
+				local showStatusBar = Utils.getNoNil(info.showStatusBar, true)	
+				self.infoLabel[index]:setText(info.title)
+				self.infoValue[index]:setText(valueText)
+				
+				self:setStatusBarValue(self.infoStatusBar[index], info.ratio, info.invertedBar, info.disabled)
+				
+				self.infoStatusBar[index]:setVisible(showStatusBar)
+				if self.infoStatusBar[index].parent ~= nil then self.infoStatusBar[index].parent:setVisible(showStatusBar) end
+					
+			end
+		end
+
+		local animalDescriptionText = husbandry:getAnimalDescription(cluster)
+
+		self.detailDescriptionText:setText(animalDescriptionText)
+	end
+
+	self:updateConditionDisplay(husbandry)
+	self:updateFoodDisplay(husbandry)
 end
 
 function AdvancedHusbandryInfo:getConditionInfosLiquidManure(superFunc, superFunc)
@@ -375,6 +508,13 @@ end
 
 --- food display ---
 InGameMenuAnimalsFrame.updateFoodDisplay = Utils.overwrittenFunction(InGameMenuAnimalsFrame.updateFoodDisplay, AdvancedHusbandryInfo.updateFoodDisplay)
+PlaceableHusbandryFood.getFoodInfos = Utils.overwrittenFunction(PlaceableHusbandryFood.getFoodInfos, AdvancedHusbandryInfo.getFoodInfos)
+
+PlaceableHusbandryAnimals.getAnimalInfos = Utils.overwrittenFunction(PlaceableHusbandryAnimals.getAnimalInfos, AdvancedHusbandryInfo.getAnimalInfos)
+
+InGameMenuAnimalsFrame.displayCluster = Utils.overwrittenFunction(InGameMenuAnimalsFrame.displayCluster, AdvancedHusbandryInfo.displayCluster)
+
+
 --- husbandry frame section title
 InGameMenuAnimalsFrame.getTitleForSectionHeader = Utils.overwrittenFunction(InGameMenuAnimalsFrame.getTitleForSectionHeader, AdvancedHusbandryInfo.getTitleForSectionHeader)
 
