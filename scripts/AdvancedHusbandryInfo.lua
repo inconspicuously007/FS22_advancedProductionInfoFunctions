@@ -24,6 +24,52 @@ function AdvancedHusbandryInfo:setTextColor(textElement, value, highIsDanger)
 	end
 end
 
+function AdvancedHusbandryInfo:onPostLoad(superFunc)
+	local spec = self.spec_husbandryFood
+	spec.animalTypeIndex = self:getAnimalTypeIndex()
+	local animalFood = g_currentMission.animalFoodSystem:getAnimalFood(spec.animalTypeIndex)
+	if animalFood ~= nil then
+		spec.fillTypeToFoodGroup = {}
+		for _, foodGroup in pairs(animalFood.groups) do
+			for _, fillTypeIndex in pairs(foodGroup.fillTypes) do
+				if spec.fillLevels[fillTypeIndex] == nil then
+					spec.fillTypeToFoodGroup[fillTypeIndex] = {
+						foodGroup = foodGroup,
+						consumpt = animalFood.consumptionType,
+						groupCapacity = MathUtil.round(foodGroup.productionWeight * spec.capacity)
+					}					
+				end
+			end
+		end
+	end	
+end
+
+function AdvancedHusbandryInfo:getFreeFoodCapacity(superFunc, fillTypeIndex)
+	local spec = self.spec_husbandryFood
+
+	if spec.supportedFillTypes[fillTypeIndex] == nil then
+		return 0
+	end
+	
+	if spec.fillTypeToFoodGroup ~= nil and spec.fillTypeToFoodGroup[fillTypeIndex] ~= nil and spec.fillLevels[fillTypeIndex] ~= nil then
+		if spec.fillTypeToFoodGroup[fillTypeIndex].consumpt == AnimalFoodSystem.FOOD_CONSUME_TYPE_PARALLEL then
+			local groupFillLevel = 0
+			local foodGroup = spec.fillTypeToFoodGroup[fillTypeIndex].foodGroup
+			local groupCapacity = spec.fillTypeToFoodGroup[fillTypeIndex].groupCapacity
+			
+			for _, fillTypeIndex in pairs(foodGroup.fillTypes) do
+				if spec.fillLevels[fillTypeIndex] ~= nil then
+					groupFillLevel = groupFillLevel + spec.fillLevels[fillTypeIndex]
+				end
+			end
+			
+			return groupCapacity - groupFillLevel
+		end
+	end
+	
+	return spec.capacity - self:getTotalFood()
+end
+
 function AdvancedHusbandryInfo:getFoodInfos(superFunc, superFunc)
 	local foodInfos = superFunc(self)
 	local spec = self.spec_husbandryFood
@@ -138,9 +184,9 @@ end
 function AdvancedHusbandryInfo:updateConditionDisplay(superFunc, husbandry)
 	local infos = husbandry:getConditionInfos()	
 	
-	for index, row in ipairs(self.conditionRow) do
+	for index, row in ipairs(self.conditionRow) do		
 		local info = infos[index]
-
+		
 		row:setVisible(info ~= nil)
 
 		if info ~= nil then
@@ -508,8 +554,10 @@ end
 
 --- food display ---
 InGameMenuAnimalsFrame.updateFoodDisplay = Utils.overwrittenFunction(InGameMenuAnimalsFrame.updateFoodDisplay, AdvancedHusbandryInfo.updateFoodDisplay)
-PlaceableHusbandryFood.getFoodInfos = Utils.overwrittenFunction(PlaceableHusbandryFood.getFoodInfos, AdvancedHusbandryInfo.getFoodInfos)
 
+PlaceableHusbandryFood.getFoodInfos = Utils.overwrittenFunction(PlaceableHusbandryFood.getFoodInfos, AdvancedHusbandryInfo.getFoodInfos)
+PlaceableHusbandryFood.onPostLoad = Utils.prependedFunction(PlaceableHusbandryFood.onPostLoad, AdvancedHusbandryInfo.onPostLoad)
+PlaceableHusbandryFood.getFreeFoodCapacity = Utils.overwrittenFunction(PlaceableHusbandryFood.getFreeFoodCapacity, AdvancedHusbandryInfo.getFreeFoodCapacity)
 PlaceableHusbandryAnimals.getAnimalInfos = Utils.overwrittenFunction(PlaceableHusbandryAnimals.getAnimalInfos, AdvancedHusbandryInfo.getAnimalInfos)
 
 InGameMenuAnimalsFrame.displayCluster = Utils.overwrittenFunction(InGameMenuAnimalsFrame.displayCluster, AdvancedHusbandryInfo.displayCluster)

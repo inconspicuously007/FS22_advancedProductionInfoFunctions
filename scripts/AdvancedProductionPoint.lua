@@ -1,5 +1,5 @@
 AdvancedProductionPoint = {}
-AdvancedProductionPoint.WAIT_AFTER_TOGGLE = 1300
+AdvancedProductionPoint.WAIT_AFTER_TOGGLE = 1500
 
 --ProductionPoint.OUTPUT_MODE.SPAWN_PALLET = 4
 ProductionPoint.PROD_STATUS.PAUSED = 4
@@ -17,10 +17,11 @@ local function registerProductionPointOutputMode(name, value)
 					value = mode
 				end
 			end
-			
-			for _, mode in pairs(pdlc_pumpsAndHosesPack.SandboxProductionPoint.OUTPUT_MODE) do
-				if value < mode then
-					value = mode
+			if g_modIsLoaded.pdlc_pumpsAndHosesPack then
+				for _, mode in pairs(pdlc_pumpsAndHosesPack.SandboxProductionPoint.OUTPUT_MODE) do
+					if value < mode then
+						value = mode
+					end
 				end
 			end
 

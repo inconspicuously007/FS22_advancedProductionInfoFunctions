@@ -54,10 +54,12 @@ function AdvancedSiloInfo:updateInfoSilo(superFunc, superFunc, infoTable)
 						newFillLevel = oldFillLevel + fillLevel
 						spec.fillTypesAndLevelsAuxiliary[fillTypeID].fillLevel = newFillLevel
 					else
+						local capacity = nil
+						if storage.capacities ~= nil then capacity = storage.capacities[fillTypeID] or nil else capacity = storage.capacity end
 						spec.fillTypesAndLevelsAuxiliary[fillTypeID] = {
 							fillType = fillTypeID,
 							fillLevel = fillLevel,
-							capacity = storage.capacities[fillTypeID] or nil
+							capacity = capacity
 						}
 					end					
 					totalFillLevel = totalFillLevel + fillLevel					
