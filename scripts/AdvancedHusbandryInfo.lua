@@ -199,7 +199,13 @@ function AdvancedHusbandryInfo:updateConditionDisplay(superFunc, husbandry)
 			elseif info.capacity ~= nil then
 				--- set text for all other filltypes than productivity ---
 				valueText = valueText .. " [ " .. self.l10n:formatVolume(info.capacity, 0) .. " ]"
-				fillGrade = info.value / info.capacity *100				
+				fillGrade = info.value / info.capacity * 100
+			elseif info.capacity == nil then				
+				local capacity = info.value / info.ratio
+				if capacity ~= nil and capacity > 0 then
+					valueText = valueText .. " [ " .. self.l10n:formatVolume(capacity, 0) .. " ]"
+					fillGrade = info.value / capacity * 100
+				end
 			end
 			self.conditionLabel[index]:setText(info.title)
 			self.conditionValue[index]:setText(valueText)
