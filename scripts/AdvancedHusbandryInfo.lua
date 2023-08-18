@@ -200,7 +200,7 @@ function AdvancedHusbandryInfo:updateConditionDisplay(superFunc, husbandry)
 				--- set text for all other filltypes than productivity ---
 				valueText = valueText .. " [ " .. self.l10n:formatVolume(info.capacity, 0) .. " ]"
 				fillGrade = info.value / info.capacity * 100
-			elseif info.capacity == nil then				
+			elseif info.capacity == nil and index > 1 then				
 				local capacity = info.value / info.ratio
 				if capacity ~= nil and capacity > 0 then
 					valueText = valueText .. " [ " .. self.l10n:formatVolume(capacity, 0) .. " ]"
