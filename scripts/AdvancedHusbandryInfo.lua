@@ -1,4 +1,5 @@
 AdvancedHusbandryInfo = {}
+AdvancedHusbandryInfo.modDir = g_currentModDirectory
 
 function AdvancedHusbandryInfo:setTextColor(textElement, value, highIsDanger)
 	if ModSettings.userSettings.fillLevelColored ~= nil and ModSettings.userSettings.fillLevelColored == 2 then
@@ -149,12 +150,12 @@ function AdvancedHusbandryInfo:updateFoodDisplay(superFunc, husbandry)
 	local groupCapacity = 0
 	local consumptionType = 0
 	
-	for index, row in ipairs(self.foodRow) do
+	for index, row in ipairs(self.foodRow) do	
 		local info = infos[index]		
-		row:setVisible(info ~= nil)
-
+		row:setVisible(info ~= nil)		
 		if info ~= nil then			
 			local valueText = self.l10n:formatVolume(info.value, 0)
+			
 			totalCapacity = info.capacity
 			groupCapacity = info.groupCapacity
 			totalValue = totalValue + info.value
@@ -184,14 +185,13 @@ end
 function AdvancedHusbandryInfo:updateConditionDisplay(superFunc, husbandry)
 	local infos = husbandry:getConditionInfos()	
 	
-	for index, row in ipairs(self.conditionRow) do		
-		local info = infos[index]
-		
-		row:setVisible(info ~= nil)
-
+	for index, row in ipairs(self.conditionRow) do	
+		--printf("DEBUG: row: '%s'", index)
+		local info = infos[index]		
+		row:setVisible(info ~= nil)		
 		if info ~= nil then
 			local valueText = info.valueText or self.l10n:formatVolume(info.value, 0, info.customUnitText)
-			local fillGrade = 0
+			local fillGrade = 0			
 			if info.palletcapacity ~= nil then
 				--- set text for pallets ---				
 				valueText = valueText .. " [ " .. self.l10n:formatVolume(math.floor((info.value / info.palletcapacity)), 0, "") .. " / " .. self.l10n:formatVolume(info.maxpallets, 0, "") .. g_i18n:getText("category_pallets") .. " ]"
@@ -595,4 +595,47 @@ FeedingRobot.updateInfo = Utils.overwrittenFunction(FeedingRobot.updateInfo, Adv
 if g_modIsLoaded.pdlc_pumpsAndHosesPack then
 	pdlc_pumpsAndHosesPack.PlaceableHusbandryBedding.updateInfo = Utils.overwrittenFunction(pdlc_pumpsAndHosesPack.PlaceableHusbandryBedding.updateInfo, AdvancedHusbandryInfo.updateInfoPlaceableHusbandryBedding)
 	pdlc_pumpsAndHosesPack.ManureSeparatorPlaceable.updateInfo = Utils.overwrittenFunction(pdlc_pumpsAndHosesPack.ManureSeparatorPlaceable.updateInfo, AdvancedHusbandryInfo.updateInfoManureSeparator)
+end
+
+if g_gui ~= nil then
+	--print("Debug: g_currentMission.inGameMenu.pageAnimals")
+	--DebugUtil.printTableRecursively(g_currentMission.inGameMenu.pageAnimals,"__",0,3)
+	
+	
+	--local frameController = InGameMenuAnimalsFrame.new(nil, g_messageCenter, g_i18n, g_fillTypeManager)
+	--g_gui:loadGui(AdvancedHusbandryInfo.modDir .. "gui/guiInGameMenuAnimalsFrame.xml", "AnimalsFrame", frameController, true)
+	--local inGameMenu = g_gui.screenControllers[InGameMenu]
+	
+	--inGameMenu:rebuildTabList()
+	--inGameMenu:updatePages()
+	
+	--print("Debug: g_currentMission.inGameMenu.pageAnimals after")
+	--DebugUtil.printTableRecursively(g_currentMission.inGameMenu.pageAnimals,"__",0,3)
+	
+	--print("Debug: ingameMenuAnimals")
+	--DebugUtil.printTableRecursively(g_gui.frames.ingameMenuAnimals.target,"__",0,3)
+	--DebugUtil.printTableRecursively(g_gui.screenControllers,"__",0,1)
+	
+	--local inGameMenuAnimalsFrame = InGameMenuAnimalsFrame.new(nil, g_messageCenter, g_i18n, g_fillTypeManager)
+	--g_gui:loadGui(AdvancedHusbandryInfo.modDir .. "gui/guiInGameMenuAnimalsFrame.xml", "AnimalsFrame", inGameMenuAnimalsFrame, true)
+	--InGameMenuAnimalsFrame.createFromExistingGui(g_gui.frames.ingameMenuAnimals.target, "InGameMenuAnimalsFrame")
+	--local inGameMenu = g_gui.screenControllers[InGameMenu]	
+	--print("DEBUG")
+	--DebugUtil.printTableRecursively(inGameMenu.pageAnimals,"__",0,3)
+	--inGameMenu.pageAnimals:onGuiSetupFinished()
+	--inGameMenu.pagingElement:updatePageMapping()
+	--inGameMenu:initializePages()
+	
+	--local old_gui = g_gui.frames.ingameMenuAnimals.target
+	--local controller = old_gui:getController()
+	--local newGui = InGameMenuAnimalsFrame.new(nil, g_messageCenter, g_i18n, g_fillTypeManager)
+	--if controller ~= nil then
+		--newGui:setController(controller)
+		--g_gui:loadGui(AdvancedHusbandryInfo.modDir .. "gui/guiInGameMenuAnimalsFrame.xml", "AnimalsFrame", old_gui, true)
+			
+		--print("inGameMenu.pageAnimals")
+	--else
+	--	print("DEBUG ERROR")
+	--end
+	--DebugUtil.printTableRecursively(inGameMenu.pageAnimals,"__",0,3)
 end

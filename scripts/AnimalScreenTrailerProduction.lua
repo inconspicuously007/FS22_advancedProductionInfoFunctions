@@ -69,15 +69,23 @@ function AnimalScreenTrailerProduction:getSourceName()
 end
 
 function AnimalScreenTrailerProduction:getTargetName()
-    local name = self.production.name or AnimalScreenTrailerProduction.L10N_SYMBOL.FARM
+    local name = self.production.name or g_i18n:getText(AnimalScreenTrailerProduction.L10N_SYMBOL.FARM)
     local clusters = self.trailer:getClusters()
     if #clusters > 0 and #clusters == 1 then
         local cluster = clusters[1]
         local subType = g_currentMission.animalSystem:getSubTypeByIndex(cluster:getSubTypeIndex())
         local fillType = self.production.animalSubTypeToFillType[subType.fillTypeIndex]
-        local used = self.production.storage:getFillLevel(fillType.index)
-        local total = self.production.storage:getCapacity(fillType.index) or 0
-
+		local fillTypeRatio = self.production.supportedAnimalSubTypes[subType.fillTypeIndex].fillTypeRatio
+		if self.production.supportedAnimalSubTypes[subType.fillTypeIndex].fillTypeOffspring then		
+			local clusterAge = cluster:getAge()
+			if clusterAge >= self.production.supportedAnimalSubTypes[subType.fillTypeIndex].animalMinAgeOffspring and clusterAge < self.production.supportedAnimalSubTypes[subType.fillTypeIndex].animalMinAge then 
+				fillType = self.production.supportedAnimalSubTypes[subType.fillTypeIndex].fillTypeOffspring
+				fillTypeRatio = self.production.supportedAnimalSubTypes[subType.fillTypeIndex].fillTypeRatioOffspring
+			end
+		end		
+        local used = math.floor(self.production.storage:getFillLevel(fillType.index)/fillTypeRatio) or 0
+        local total = math.floor(self.production.storage:getCapacity(fillType.index)/fillTypeRatio) or 0
+		
         return string.format("%s (%d / %d)", name, used, total)
     end
 
@@ -125,12 +133,17 @@ function AnimalScreenTrailerProduction:getNumOfFreeAnimalSlotsProduction(itemInd
     local item = self.sourceItems[itemIndex]
     local cluster = self.trailer:getClusterById(item:getClusterId())
     local subType = g_currentMission.animalSystem:getSubTypeByIndex(cluster:getSubTypeIndex())
-    local fillType = self.production.animalSubTypeToFillType[subType.fillTypeIndex]
-    local freeCapacity = self.production.storage:getFreeCapacity(fillType.index)
-    local fillTypeRatio = self.production.animalSubTypeToFillTypeRatio[subType.fillTypeIndex]
-    local fillLevelPerAnimal = fillTypeRatio * cluster:getAgeFactor() * math.max(cluster:getHealthFactor(), 0.1)
-
-    return math.floor(freeCapacity/fillLevelPerAnimal)
+    local fillType = self.production.animalSubTypeToFillType[subType.fillTypeIndex]	     
+	local fillTypeRatio = self.production.supportedAnimalSubTypes[subType.fillTypeIndex].fillTypeRatio
+	if self.production.supportedAnimalSubTypes[subType.fillTypeIndex].fillTypeOffspring then		
+		local clusterAge = cluster:getAge()
+		if clusterAge >= self.production.supportedAnimalSubTypes[subType.fillTypeIndex].animalMinAgeOffspring and clusterAge < self.production.supportedAnimalSubTypes[subType.fillTypeIndex].animalMinAge then 
+			fillType = self.production.supportedAnimalSubTypes[subType.fillTypeIndex].fillTypeOffspring
+			fillTypeRatio = self.production.supportedAnimalSubTypes[subType.fillTypeIndex].fillTypeRatioOffspring
+		end
+	end
+	local freeCapacity = self.production.storage:getFreeCapacity(fillType.index)    
+	return math.floor(freeCapacity/fillTypeRatio)
 end
 
 function AnimalScreenTrailerProduction:getTargetMaxNumAnimals(itemIndex)

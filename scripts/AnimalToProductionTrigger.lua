@@ -140,8 +140,11 @@ function AnimalToProductionTrigger:showAnimalScreen(production)
 
     if controller ~= nil then
         controller:init()
-        g_animalScreen:setController(controller)
-        g_gui:showGui("AnimalScreen")
+        --g_animalScreen:setController(controller)
+        --g_gui:showGui("AnimalScreen")
+		g_animalProductionScreen:setController(controller)
+		g_gui:showGui("AnimalProductionScreen")
+		g_animalProductionScreen.balanceElement:setValue(nil)
     end
 end
 
