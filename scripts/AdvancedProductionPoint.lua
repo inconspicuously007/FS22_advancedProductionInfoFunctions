@@ -1,4 +1,5 @@
 AdvancedProductionPoint = {}
+AdvancedProductionPoint.modDir = g_currentModDirectory
 AdvancedProductionPoint.WAIT_AFTER_TOGGLE = 1500
 
 --ProductionPoint.OUTPUT_MODE.SPAWN_PALLET = 4
@@ -50,6 +51,11 @@ function AdvancedProductionPoint.registerXMLPaths(schema, basePath)
 	schema:register(XMLValueType.FLOAT, basePath .. ".animalInputTrigger.animal(?)#targetRatio", "", 1.0)
 	schema:register(XMLValueType.INT, basePath .. ".animalInputTrigger.animal(?)#minAgeMonth", "", 36)
 	schema:register(XMLValueType.FLOAT, basePath .. ".animalInputTrigger.animal(?)#minHealthFactor", "", 0.75)
+	
+	schema:register(XMLValueType.STRING, basePath .. ".animalInputTrigger.animal(?)#targetFillTypeOffspring", "", "")
+	schema:register(XMLValueType.FLOAT, basePath .. ".animalInputTrigger.animal(?)#targetRatioOffspring", "", 1.0)
+	schema:register(XMLValueType.INT, basePath .. ".animalInputTrigger.animal(?)#minAgeMonthOffspring", "", 36)
+	schema:register(XMLValueType.FLOAT, basePath .. ".animalInputTrigger.animal(?)#minHealthFactorOffspring", "", 0.75)
 end
 
 function AdvancedProductionPoint.registerSavegameXMLPaths(schema, basePath)
@@ -438,6 +444,19 @@ function AdvancedProductionPoint:load(superFunc, components, xmlFile, key, custo
 								animalMinAge = animalSourceMinAge,
 								animalMinHealth = animalSourceMinHealth
 							}
+							local animalTargetFillTypeNameOffspring = xmlFile:getString(animalKey .. "#targetFillTypeOffspring")
+							if animalTargetFillTypeNameOffspring ~= nil then
+								local animalTargetFillTypeOffspring = g_fillTypeManager:getFillTypeByName(animalTargetFillTypeNameOffspring)
+								if animalTargetFillTypeOffspring ~= nil and self.storage:getIsFillTypeSupported(animalTargetFillTypeOffspring.index) then
+									local animalTargetFillTypeRatioOffspring = xmlFile:getValue(animalKey .. "#targetRatioOffspring", 1) or 1
+									local animalSourceMinAgeOffspring = xmlFile:getValue(animalKey .. "#minAgeMonthOffspring", 18) or 18
+									local animalSourceMinHealthOffspring = xmlFile:getValue(animalKey .. "#minHealthFactorOffspring", 0.75) or 0.75
+									self.supportedAnimalSubTypes[animalSubType.fillTypeIndex].fillTypeOffspring = animalTargetFillTypeOffspring
+									self.supportedAnimalSubTypes[animalSubType.fillTypeIndex].fillTypeRatioOffspring = animalTargetFillTypeRatioOffspring
+									self.supportedAnimalSubTypes[animalSubType.fillTypeIndex].animalMinAgeOffspring = animalSourceMinAgeOffspring
+									self.supportedAnimalSubTypes[animalSubType.fillTypeIndex].animalMinHealthOffspring = animalSourceMinHealthOffspring
+								end
+							end
 							self.animalSubTypeToFillType[animalSubType.fillTypeIndex] = animalTargetFillType
 							self.animalSubTypeToFillTypeRatio[animalSubType.fillTypeIndex] = animalTargetFillTypeRatio
 							addTrigger = true
@@ -453,7 +472,7 @@ function AdvancedProductionPoint:load(superFunc, components, xmlFile, key, custo
 			end)
 			if addTrigger then
 				self.animalToProductionTrigger = AnimalToProductionTrigger.new(self.isServer, self.isClient)
-				self.animalToProductionTrigger:load(animalInputTriggerNode, self)
+				self.animalToProductionTrigger:load(animalInputTriggerNode, self)				
 			end
 		end
 	end

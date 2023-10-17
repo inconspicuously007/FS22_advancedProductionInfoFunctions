@@ -79,8 +79,18 @@ function AnimalMoveProductionEvent:run(connection)
         local subType = g_currentMission.animalSystem:getSubTypeByIndex(cluster:getSubTypeIndex())
         local fillType = self.targetObject.supportedAnimalSubTypes[subType.fillTypeIndex].fillType
         local fillTypeRatio = self.targetObject.supportedAnimalSubTypes[subType.fillTypeIndex].fillTypeRatio
-        local deltaFillLevel = fillTypeRatio * self.numAnimals
+        
+		if self.targetObject.supportedAnimalSubTypes[subType.fillTypeIndex].fillTypeOffspring then		
+			local clusterAge = cluster:getAge()
+			if clusterAge >= self.targetObject.supportedAnimalSubTypes[subType.fillTypeIndex].animalMinAgeOffspring and clusterAge < self.targetObject.supportedAnimalSubTypes[subType.fillTypeIndex].animalMinAge then 
+				fillType = self.targetObject.supportedAnimalSubTypes[subType.fillTypeIndex].fillTypeOffspring
+				fillTypeRatio = self.targetObject.supportedAnimalSubTypes[subType.fillTypeIndex].fillTypeRatioOffspring
+			end
+		end
+		
+		local deltaFillLevel = fillTypeRatio * self.numAnimals
         local fillLevel = self.targetObject.storage:getFillLevel(fillType.index)
+		
         self.targetObject.storage:setFillLevel(fillLevel + deltaFillLevel, fillType.index)
 
         local clusterSystem = self.sourceObject:getClusterSystem()
@@ -120,32 +130,65 @@ function AnimalMoveProductionEvent.validate(sourceObject, targetObject, clusterI
     end
 
     local clusterValid = true
+	local clusterOffspring = false
+	local clusterOffspringValid = false
+	local clusterAge = cluster:getAge()
+	local clusterHealth = cluster:getHealthFactor()
+	
     local subType = g_currentMission.animalSystem:getSubTypeByIndex(cluster:getSubTypeIndex())
     local fillType = targetObject.supportedAnimalSubTypes[subType.fillTypeIndex].fillType
-
-
-    if fillType == nil then
+	local fillTypeOffspring = targetObject.supportedAnimalSubTypes[subType.fillTypeIndex].fillTypeOffspring	
+	local animalAgeFactorOffspring = nil
+	local animalHealthFactorOffspring = nil
+	
+    if fillType == nil and fillTypeOffspring == nil then
         clusterValid = false
         return AnimalMoveProductionEvent.MOVE_ERROR_ANIMAL_NOT_SUPPORTED
     end
-
+	
+	if fillTypeOffspring ~= nil then
+		animalAgeFactorOffspring = targetObject.supportedAnimalSubTypes[subType.fillTypeIndex].animalMinAgeOffspring
+        animalHealthFactorOffspring = targetObject.supportedAnimalSubTypes[subType.fillTypeIndex].animalSourceMinHealthOffspring	
+		clusterOffspring = true
+	end
+	
     if fillType ~= nil then
         local animalAgeFactor = targetObject.supportedAnimalSubTypes[subType.fillTypeIndex].animalMinAge
-        local animalHealthFactor = targetObject.supportedAnimalSubTypes[subType.fillTypeIndex].animalMinHealth
-
-        if cluster:getAge() < animalAgeFactor then
+        local animalHealthFactor = targetObject.supportedAnimalSubTypes[subType.fillTypeIndex].animalMinHealth		
+		local chkHealth = true
+		local chkHealthOffspring = true	
+		
+        if clusterAge < animalAgeFactor and (clusterOffspring == true and clusterAge < animalAgeFactorOffspring) then
             clusterValid = false
             return AnimalMoveProductionEvent.MOVE_ERROR_ANIMAL_NOT_SUPPORTED_AGE
         end
-        if cluster:getHealthFactor() < animalHealthFactor then
+		if (clusterOffspring == true and animalHealthFactorOffspring == nil) or clusterOffspring == false then
+			chkHealthOffspring = false
+		elseif clusterOffspring == true and animalHealthFactorOffspring ~= nil then
+			if clusterHealth < animalHealthFactorOffspring then chkHealthOffspring = false end
+		end
+		if animalHealthFactor == nil then
+			chkHealth = false
+		else 
+			if clusterHealth < animalHealthFactor then chkHealth = false end
+		end
+        if chkHealth == false and chkHealthOffspring == false then
             clusterValid = false
             return AnimalMoveProductionEvent.MOVE_ERROR_ANIMAL_NOT_SUPPORTED_HEALTH
         end
-    end
+		if clusterOffspring == true then
+			if clusterAge >= animalAgeFactorOffspring and clusterAge < animalAgeFactor then
+				clusterOffspringValid = true
+			end
+		end
+    end	
 
     if clusterValid then
         local freeCapacity = targetObject.storage:getFreeCapacity(fillType.index)
-        local fillTypeRatio = targetObject.animalSubTypeToFillTypeRatio[subType.fillTypeIndex]
+        local fillTypeRatio = targetObject.supportedAnimalSubTypes[subType.fillTypeIndex].fillTypeRatio
+		if clusterOffspringValid then
+			fillTypeRatio = targetObject.supportedAnimalSubTypes[subType.fillTypeIndex].fillTypeRatioOffspring
+		end
         --local fillLevel = numAnimals * fillTypeRatio * cluster:getAgeFactor() * math.max(cluster:getHealthFactor(), 0.1)
         local fillLevel = numAnimals * fillTypeRatio
         if freeCapacity < fillLevel then
