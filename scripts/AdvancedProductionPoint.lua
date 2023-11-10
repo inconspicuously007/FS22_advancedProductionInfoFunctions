@@ -782,7 +782,8 @@ function AdvancedProductionPoint:toggleOutputDistributionMode(superFunc, outputF
 	if self.outputFillTypeIds[outputFillTypeId] ~= nil then
 		local curMode = self:getOutputDistributionMode(outputFillTypeId)
 		if g_modIsLoaded.pdlc_pumpsAndHosesPack and self.owningPlaceable.isSandboxPlaceable ~= nil and self.owningPlaceable:isSandboxPlaceable() then
-			if table.hasElement(ProductionPoint.OUTPUT_MODE, curMode + 1) then
+			--if table.hasElement(ProductionPoint.OUTPUT_MODE, curMode + 1) then
+			if table.hasElement(pdlc_pumpsAndHosesPack.SandboxProductionPoint.OUTPUT_MODE, curMode + 1) then
 				self:setOutputDistributionMode(outputFillTypeId, curMode + 1)
 			else
 				self:setOutputDistributionMode(outputFillTypeId, 0)
@@ -966,7 +967,7 @@ function AdvancedProductionPoint:setProductionState(superFunc, productionId, sta
 	end
 end
 
-function AdvancedProductionPoint:updateInfo(superFunc, superFunc, infoTable)
+function AdvancedProductionPoint:updateInfo(superFunc, infoTable)
 	superFunc(self, infoTable)
 
 	local owningFarm = g_farmManager:getFarmById(self:getOwnerFarmId())
