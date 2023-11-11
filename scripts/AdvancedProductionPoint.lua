@@ -782,9 +782,9 @@ function AdvancedProductionPoint:toggleOutputDistributionMode(superFunc, outputF
 	if self.outputFillTypeIds[outputFillTypeId] ~= nil then
 		local curMode = self:getOutputDistributionMode(outputFillTypeId)
 		if g_modIsLoaded.pdlc_pumpsAndHosesPack and self.owningPlaceable.isSandboxPlaceable ~= nil and self.owningPlaceable:isSandboxPlaceable() then
-			--if table.hasElement(ProductionPoint.OUTPUT_MODE, curMode + 1) then
-			if table.hasElement(pdlc_pumpsAndHosesPack.SandboxProductionPoint.OUTPUT_MODE, curMode + 1) then
-				self:setOutputDistributionMode(outputFillTypeId, curMode + 1)
+			local nextMode = curMode + 1
+			if table.hasElement(ProductionPoint.OUTPUT_MODE, nextMode) and nextMode ~= ProductionPoint.OUTPUT_MODE.SPAWN_PALLET then						
+				self:setOutputDistributionMode(outputFillTypeId, nextMode)
 			else
 				self:setOutputDistributionMode(outputFillTypeId, 0)
 			end

@@ -496,7 +496,7 @@ end
 
 function AdvancedProductionPointInfo:updateUtilizationOverviews(superFunc)
 	local production, prodPoint = self:getSelectedProduction()	
-	local status = production.status
+	local status = production.status or "unknown"
 	local statusKey = ProductionPoint.PROD_STATUS_TO_L10N[production.status] or "unknown"
 	local statusProfile = "ingameMenuProductionDetailValue"
 
