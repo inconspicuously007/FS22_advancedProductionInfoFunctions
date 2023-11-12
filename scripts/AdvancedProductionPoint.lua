@@ -39,8 +39,6 @@ end
 
 registerProductionPointOutputMode("SPAWN_PALLET")
 
---print("Debug: ProductionPoint.OUTPUT_MODE")
---DebugUtil.printTableRecursively(ProductionPoint.OUTPUT_MODE,"_",0,2)
 
 function AdvancedProductionPoint.registerXMLPaths(schema, basePath)
 	schema:register(XMLValueType.STRING, basePath .. "#openingHour", "Productions start to work at this time", nil, false)
@@ -66,15 +64,7 @@ function AdvancedProductionPoint:load(superFunc, components, xmlFile, key, custo
 	
 	if g_modIsLoaded.pdlc_pumpsAndHosesPack and self.owningPlaceable.isSandboxPlaceable ~= nil and self.owningPlaceable:isSandboxPlaceable() then
 		return superFunc(self, components, xmlFile, key, customEnv, i3dMappings)
-	end
-	
-	--if self:isa(SandboxProductionPoint) then
-		--return superFunc(self, outputFillTypeId, mode, noEventSend);
-		--print("Debug: self:isa(SandboxProductionPoint")
-	--end
-	
-	--printf("Debug: AdvancedProductionPoint.load: self:isa(SandboxPlaceableProductionPoint): '%s'", self:isa(SandboxPlaceableProductionPoint))
-	
+	end	
 	
 	self.node = components[1].node
 	local name = xmlFile:getValue(key .. "#name")
@@ -968,7 +958,6 @@ function AdvancedProductionPoint:setProductionState(superFunc, productionId, sta
 end
 
 function AdvancedProductionPoint:updateInfo(superFunc, infoTable)
-	superFunc(self, infoTable)
 
 	local owningFarm = g_farmManager:getFarmById(self:getOwnerFarmId())
 	local activeOutputs = {}
